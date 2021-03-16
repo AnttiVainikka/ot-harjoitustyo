@@ -1,4 +1,4 @@
-**TEHTÄVÄT**
+**Tehtävät**
 
 *Viikko 1*
 
