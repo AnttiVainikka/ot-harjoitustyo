@@ -1,1 +1,1 @@
-16.3      6h	    pelin suunnittelu ja koodauksen aloitus
+16.3             6h             pelin suunnittelu ja koodauksen aloitus
