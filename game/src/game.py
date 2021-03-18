@@ -1,13 +1,19 @@
 import pygame
 from random import randint
 pygame.init()
-screen_width = 1000
-screen_height = 800
+
+screen_width = pygame.image.load("Sprites/background_full.png").get_width()
+screen_height = pygame.image.load("Sprites/background_full.png").get_height()
+wall = pygame.image.load("Sprites/wall_length.png").get_height()
+door_wide = pygame.image.load("Sprites/wide_length_door.png").get_width()
+door_tall = pygame.image.load("Sprites/tall_length_door.png").get_height()
+
 window = pygame.display.set_mode((screen_width, screen_height))
 clock = pygame.time.Clock()
 
 font = pygame.font.SysFont("Arial", 24)
 big_font = pygame.font.SysFont("Arial", 54)
+
 
 
 
@@ -61,7 +67,7 @@ class MainCharacter(Character):
         self.atk = attack
         self.df = defense
         self.hp = hit_points
-        self.level = [1,0,100]
+        self.level = [0,0,100]
         self.alive = True
 
         self.over_sprite = over_sprite
@@ -133,7 +139,7 @@ class Monster(Character):
 def choose_party():
     party = []
 
-    Leon = MainCharacter("Leon",pygame.image.load("Sprites/standing.png"),"sprite",[12,17,21,28,42,60,80,98,132,180],[10,14,18,24,33,48,60,74,92,120],[120,170,210,280,420,600,800,980,1220,1500],0,0)
+    Leon = MainCharacter("Leon",pygame.image.load("Sprites/standing.png"),"sprite",[1200,17,21,28,42,60,80,98,132,180],[10,14,18,24,33,48,60,74,92,120],[120,170,210,280,420,600,800,980,1220,1500],600,100)
     Lise = MainCharacter("Lise",pygame.image.load("Sprites/standing.png"),"sprite",[12,17,21,28,42,60,80,98,132,180],[10,14,18,24,33,48,60,74,92,120],[120,170,210,280,420,600,800,980,1220,1500],0,0)
     Tank = Character("Tank","sprite",[3,5,8,14,19,26,42,58,70,88],[18,25,33,50,72,94,118,142,180,240],[240,320,500,680,840,1020,1300,1580,1880,2400])
     Archer = Character("Archer","sprite",[9,14,18,24,36,52,72,88,102,144],[4,9,15,21,30,36,50,66,84,112],[80,120,200,350,490,600,720,910,1080,1320])
@@ -157,39 +163,47 @@ def choose_party():
 
 
 def area1(party :list, monsters :list):
+    background = pygame.image.load("Sprites/background_full.png")
     while True:
 
         character = party[0]
-        window.fill((0, 150, 150))
+        window.blit(background,(0,-1))
         move(character,monsters)
 
-        if character.right and character.x <= screen_width-character.over_sprite.get_width():
+        if character.right and character.x <= screen_width-character.over_sprite.get_width()-wall:
             character.x += 6
-        if character.left and character.x >= 0:
+        if character.left and character.x >= wall:
             character.x -= 6
-        if character.up and character.y >= 0:
+        if character.up and character.y >= wall:
             character.y -= 6
-        if character.down and character.y <= screen_height-character.over_sprite.get_height():
+        if character.down and character.y <= screen_height-character.over_sprite.get_height()-wall:
             character.y += 6 
+
 
         if len(monsters) != 0:
             for monster in monsters:
                 monster.x += monster.speed_x
                 monster.y += monster.speed_y
-                if monster.x >= screen_width-monster.over_sprite.get_width():
+                if monster.x >= screen_width-monster.over_sprite.get_width()-wall:
                     monster.change_speed("x")
-                if monster.x <= 0:
+                if monster.x <= wall:
                     monster.change_speed("x")
-                if monster.y >= screen_height-monster.over_sprite.get_height():
+                if monster.y >= screen_height-monster.over_sprite.get_height()-wall:
                     monster.change_speed("y")
-                if monster.y <= 0:
+                if monster.y <= wall:
                     monster.change_speed("y")  
                 window.blit(monster.over_sprite, (monster.x, monster.y))
 
                 if monster.x-character.over_sprite.get_width()/2 <= character.x+character.over_sprite.get_width()/2 <= monster.x+monster.over_sprite.get_width()+character.over_sprite.get_width()/2 and monster.y-character.over_sprite.get_height()/2 <= character.y+character.over_sprite.get_height()/2 <= monster.y+monster.over_sprite.get_height()+character.over_sprite.get_height()/2:
                     battle(party,monster)
+                    monsters.remove(monster)
+                    character.right = False
+                    character.left = False
+                    character.up = False
+                    character.down = False
 
         window.blit(party[0].over_sprite, (party[0].x, party[0].y))
+        
         pygame.display.flip()
         clock.tick(60)
 
@@ -237,6 +251,9 @@ def battle(party,monster):
             if action == 1:
                 character.attack(monster,0)
 
+            if monster.alive == False:
+                return
+
         monster.attack(party[randint(0,3)],0)
 
         
@@ -262,3 +279,4 @@ def choose_action(party,monster):
 
 
 
+choose_party()
