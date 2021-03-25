@@ -6,7 +6,7 @@ Tarkoitus on luoda peli, josta pelaajat voivat saada hauskanpitoa.
 
 ## Käyttöliittymäluonnos
 
-Pelillä tulee olemaan graafinen käyttöliittymä, jota voidaan ohjata ainakin näppäimistöllä ja mahdollisesti myös hiirellä.
+Pelillä tulee olemaan graafinen käyttöliittymä, jota voidaan ohjata ainakin näppäimistöllä ja mahdollisesti myös hiirellä. Aluksi on näkymä, jossa voi aloittaa pelin ja valita hahmot, jonka jälkeen näkymä vaihtuu kenttiin, joissa pelaajan hahmoa voidaan liikuttaa.
 
 ## Perusversion tarjoama toiminnallisuus
 
