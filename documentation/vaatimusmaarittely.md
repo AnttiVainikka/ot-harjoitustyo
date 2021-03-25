@@ -14,14 +14,14 @@ Kartta, jossa pelaaja voi liikuttaa hahmoaan eri kenttien välillä, joissa liik
 
 ## Jatkokehitysideoita
 
--Useampi päähenkilö, joista valita
--Paljon eri sivuhenkilöitä, joita valita päähenkilön joukkueeseen
--Enemmän monipuolisuutta vihollisiin.
--Uusien spritejen luominen, entisten parantelu
--Useampien karttojen luominen uudelleenpelattavuuden parantamiseksi.
--Boss-vihollisten luominen, joiden päihittäminen johtaa pelin voittamiseen
--Mahdollisuus tallentaa peli, jolloin tiedot tallentuvat tiedostoon.
--Musiikin käyttöönotto peliin.
--Erinäisten taitojen/taikojen käyttöönotto sekä pelattaville hahmoille että vihollisille.
--Animaatioiden luominen taisteluja varten.
--Tarinan luominen pelille sekä kaikille hahmoille.
+-  Useampi päähenkilö, joista valita
+-  Paljon eri sivuhenkilöitä, joita valita päähenkilön joukkueeseen
+-  Enemmän monipuolisuutta vihollisiin.
+-  Uusien spritejen luominen, entisten parantelu
+-  Useampien karttojen luominen uudelleenpelattavuuden parantamiseksi.
+-  Boss-vihollisten luominen, joiden päihittäminen johtaa pelin voittamiseen
+-  Mahdollisuus tallentaa peli, jolloin tiedot tallentuvat tiedostoon.
+-  Musiikin käyttöönotto peliin.
+-  Erinäisten taitojen/taikojen käyttöönotto sekä pelattaville hahmoille että vihollisille.
+-  Animaatioiden luominen taisteluja varten.
+-  Tarinan luominen pelille sekä kaikille hahmoille.
