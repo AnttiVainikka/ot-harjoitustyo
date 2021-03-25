@@ -14,3 +14,9 @@ https://github.com/AnttiVainikka/ot-harjoitustyo/blob/master/laskarit/viikko1/ko
 *Tuntikirjanpito*
 
 https://github.com/AnttiVainikka/ot-harjoitustyo/blob/master/game/tuntikirjanpito.md
+
+
+
+
+*Vaatimusmäärittely*
+https://github.com/AnttiVainikka/ot-harjoitustyo/blob/master/documentation/vaatimusmaarittely.md
