@@ -19,4 +19,5 @@ https://github.com/AnttiVainikka/ot-harjoitustyo/blob/master/game/tuntikirjanpit
 
 
 *Vaatimusmäärittely*
+
 https://github.com/AnttiVainikka/ot-harjoitustyo/blob/master/documentation/vaatimusmaarittely.md
