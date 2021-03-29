@@ -273,6 +273,7 @@ class StartGame():
             area28 = Area(pygame.image.load("Sprites/background_right_top.png"))
             area29 = Area(pygame.image.load("Sprites/background_top_bottom.png"))
             area30 = Area(pygame.image.load("Sprites/background_top_bottom.png"))
+            area31 = Area(pygame.image.load("Sprites/background_left_right.png"))
             boss = Area(pygame.image.load("Sprites/background_top.png"))
 
             self.start.set_neighbours(None,None,area1,None)
@@ -282,7 +283,7 @@ class StartGame():
             area4.set_neighbours(None,None,area6,area2)
             area5.set_neighbours(area3,None,area7,None)
             area6.set_neighbours(area23,area10,area8,area4)
-            area7.set_neighbours(None,area21,area9,area5)
+            area7.set_neighbours(None,area31,area9,area5)
             area8.set_neighbours(None,None,area12,area6)
             area9.set_neighbours(None,None,area11,area7)
             area10.set_neighbours(area6,None,None,None)
@@ -294,7 +295,7 @@ class StartGame():
             area16.set_neighbours(area18,area14,None,None)
             area17.set_neighbours(None,None,area15,area19)
             area18.set_neighbours(None,area16,None,area20)
-            area19.set_neighbours(area21,None,area17,None)
+            area19.set_neighbours(area31,None,area17,None)
             area20.set_neighbours(None,None,area18,area21)
             area21.set_neighbours(area25,None,area20,area22)
             area22.set_neighbours(None,area23,area21,area24)
@@ -306,6 +307,7 @@ class StartGame():
             area28.set_neighbours(None,area26,area29,None)
             area29.set_neighbours(None,None,area27,area28)
             area30.set_neighbours(None,None,area26,boss)
+            area31.set_neighbours(area7,area19,None,None)
             boss.set_neighbours(None,None,area30,None)
 
 
