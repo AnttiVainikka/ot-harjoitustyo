@@ -1,20 +1,8 @@
 import pygame
 from random import randint
 pygame.init()
-pygame.display.set_caption("A Game of Dissappearing Bears (working title)")
-
-screen_width = pygame.image.load("Sprites/background_full.png").get_width()
-screen_height = pygame.image.load("Sprites/background_full.png").get_height()
-wall = pygame.image.load("Sprites/wall_length.png").get_height()
-door_wide = pygame.image.load("Sprites/wide_length_door.png").get_width()
-door_tall = pygame.image.load("Sprites/tall_length_door.png").get_height()
-
-window = pygame.display.set_mode((screen_width, screen_height))
 clock = pygame.time.Clock()
-
-font = pygame.font.SysFont("Arial", 24)
-big_font = pygame.font.SysFont("Arial", 54)
-
+pygame.display.set_caption("A Game of Dissappearing Bears (working title)")
 
 
 
@@ -35,11 +23,14 @@ class Character():
     def give_exp(self,exp :int):
         if self.level[0] < 9:
             self.level[1] += exp
-            if self.level[1] >= self.level[2]:
-                self.level[0] += 1
-                self.level[1] = self.level[1]-self.level[2]
-                self.level[2] += 50
-                self.taken_dmg = 0
+            while True:
+                if self.level[1] >= self.level[2]:
+                    self.level[0] += 1
+                    self.level[1] = self.level[1]-self.level[2]
+                    self.level[2] += 50
+                    self.taken_dmg = 0
+                else:
+                    break
 
 
     def take_dmg(self,damage):
@@ -54,6 +45,7 @@ class Character():
 
     def reset_health(self):
         self.hp[self.level[0]] += self.taken_dmg
+        self.taken_dmg = 0
 
     def attack(self,target,skill):
         if skill == 0:
@@ -124,6 +116,10 @@ class Monster(Character):
         self.alive = True
         self.taken_dmg = 0
 
+        screen_width = pygame.image.load("Sprites/background_full.png").get_width()
+        screen_height = pygame.image.load("Sprites/background_full.png").get_height()
+        wall = pygame.image.load("Sprites/wall_length.png").get_height()
+
         self.over_sprite = over_sprite
         self.x = randint(wall+10,screen_width-wall-self.over_sprite.get_width()-10)
         self.y = randint(wall+10,screen_height-wall-self.over_sprite.get_height()-10)
@@ -180,9 +176,20 @@ class Area():
         self.right = right
         self.top = top
         self.bottom = bottom
-        
     
     def activate(self,party :list, monsters: list, boss):
+        
+        screen_width = pygame.image.load("Sprites/background_full.png").get_width()
+        screen_height = pygame.image.load("Sprites/background_full.png").get_height()
+        wall = pygame.image.load("Sprites/wall_length.png").get_height()
+        door_wide = pygame.image.load("Sprites/wide_length_door.png").get_width()
+        door_tall = pygame.image.load("Sprites/tall_length_door.png").get_height()
+
+        window = pygame.display.set_mode((screen_width, screen_height))
+        
+
+        font = pygame.font.SysFont("Arial", 25)
+        big_font = pygame.font.SysFont("Arial", 50)
         
         area_monsters = []
         if self.start == False and self.boss == False: 
@@ -199,6 +206,9 @@ class Area():
 
             if self.boss:
                 window.blit(boss.over_sprite, (boss.x, boss.y))
+                if collision(party[0],boss,countdown):
+                    battle(party,boss)
+                    pygame.quit()
 
             if party[0].left and party[0].x >= wall and party[0].up == False and party[0].down == False:
                 party[0].x -= 6
@@ -240,7 +250,8 @@ class Area():
                 countdown += 1
                 party[0].direction = 3
 
-
+            if countdown > 27:
+                countdown = 0
 
             if party[0].right and party[0].x + 6 > screen_width-character_width-wall and door_tall < party[0].y < screen_height - door_tall:
                 if self.right != None:
@@ -273,7 +284,7 @@ class Area():
                         monster.change_speed("y")  
                     window.blit(monster.over_sprite, (monster.x, monster.y))
 
-                    if monster.x-character_width/2 <= party[0].x+character_width/2 <= monster.x+monster.over_sprite.get_width()+character_width/2 and monster.y-character_height/2 <= party[0].y+character_height/2 <= monster.y+monster.over_sprite.get_height()+character_height/2:
+                    if collision(party[0],monster,countdown):
                         battle(party,monster)
                         for character in party:
                             character.give_exp(monster.level[0]*50)
@@ -284,8 +295,7 @@ class Area():
                         party[0].left = False
                         party[0].up = False
                         party[0].down = False
-            if countdown > 27:
-                countdown = 0
+
             window.blit(party[0].over_sprite[party[0].direction][countdown],(party[0].x,party[0].y))
             pygame.display.flip()
             clock.tick(50)
@@ -306,6 +316,9 @@ class StartGame():
     
     def generate_map(self):
         pick = 1
+        screen_width = pygame.image.load("Sprites/background_full.png").get_width()
+        screen_height = pygame.image.load("Sprites/background_full.png").get_height()
+        wall = pygame.image.load("Sprites/wall_length.png").get_height()
 
         if pick == 1:
             self.boss = Boss("Necromancer",pygame.image.load("Sprites/necromancer1.png"),pygame.image.load("Sprites/necromancer2.png"),
@@ -388,6 +401,10 @@ class StartGame():
             
 
     def choose_party(self):
+
+        screen_width = pygame.image.load("Sprites/background_full.png").get_width()
+        screen_height = pygame.image.load("Sprites/background_full.png").get_height()
+        wall = pygame.image.load("Sprites/wall_length.png").get_height()
         
         walking_left = [pygame.image.load("Sprites/stand_left.png")]
         walking_right = [pygame.image.load("Sprites/stand_right.png")]
@@ -452,7 +469,7 @@ class StartGame():
         self.party.append(main_character)
         self.party.append(Knight)
         self.party.append(Wizard)
-        self.party.append(Archer)
+        self.party.append(Assassin)
     
 
     def pick_monsters(self):
@@ -526,17 +543,44 @@ def move(character :MainCharacter,monsters :list):
             if event.key == pygame.K_DOWN:
                 character.stop_down()     
 
- 
+def collision(character,monster,countdown):
+    character_width = character.over_sprite[character.direction][countdown].get_width()
+    character_height = character.over_sprite[character.direction][countdown].get_height()
+    if monster.x-character_width/2 <= character.x+character_width/2 <= monster.x+monster.over_sprite.get_width()+character_width/2 and monster.y-character_height/2 <= character.y+character_height/2 <= monster.y+monster.over_sprite.get_height()+character_height/2:
+        return True
 
 def battle(party,monster):
+    screen_width = pygame.image.load("Sprites/background_full.png").get_width()
+    screen_height = pygame.image.load("Sprites/background_full.png").get_height()
+    wall = pygame.image.load("Sprites/wall_length.png").get_height()
+    door_wide = pygame.image.load("Sprites/wide_length_door.png").get_width()
+    door_tall = pygame.image.load("Sprites/tall_length_door.png").get_height()
+
+    window = pygame.display.set_mode((screen_width, screen_height))
+        
+    font = pygame.font.SysFont("Arial", 25)
+    big_font = pygame.font.SysFont("Arial", 50)
+
     while True:
         for character in party:
             window.fill((0, 0, 0))
-            window.blit(font.render(f"{monster.name}:   {monster.hp[monster.level[0]]}", True, (200, 0, 0)), (20, 0))
-            window.blit(font.render(f"{party[0].name}:  hp {party[0].hp[party[0].level[0]]} lvl {party[0].level[0]}", True, (0, 200, 0)), (20, 50))
-            window.blit(font.render(f"{party[1].name}:  hp {party[1].hp[party[1].level[0]]} lvl {party[1].level[0]}", True, (0, 200, 0)), (20, 100))
-            window.blit(font.render(f"{party[2].name}:  hp {party[2].hp[party[2].level[0]]} lvl {party[2].level[0]}", True, (0, 200, 0)), (20, 150))
-            window.blit(font.render(f"{party[3].name}:  hp {party[3].hp[party[3].level[0]]} lvl {party[3].level[0]}", True, (0, 200, 0)), (20, 200))
+            window.blit(font.render(f"{monster.name}:   {monster.hp[monster.level[0]]}/{monster.hp[monster.level[0]]+monster.taken_dmg}", True, (200, 0, 0)), (20, 0))
+
+            window.blit(font.render(character.name, True, (200,200,200)),(0,screen_height-125))
+            window.blit(font.render("1. Attack", True, (200,200,200)),(0,screen_height-100))
+            window.blit(font.render("2. Skill", True, (200,200,200)),(0,screen_height-75))
+            window.blit(font.render("3. Item", True, (200,200,200)),(0,screen_height-50))
+            window.blit(font.render("4. Run", True, (200,200,200)),(0,screen_height-25))
+
+            for i in range(0,4):
+                window.blit(font.render(party[i].name, True, (0,200,0)),(300,screen_height-100+i*25))
+                window.blit(font.render(f"HP  {party[i].hp[party[i].level[0]]}/{party[i].hp[party[i].level[0]]+party[i].taken_dmg}", True, (0,200,0)),(500,screen_height-100+i*25))
+                window.blit(font.render("MP  0/0", True, (0,200,0)),(750,screen_height-100+i*25))
+                window.blit(font.render(f"LVL  {party[i].level[0]+1}/10", True, (0,200,0)),(950,screen_height-100+i*25))
+                window.blit(party[i].sprite,(i*10+10,300+i*100))
+
+            window.blit(monster.sprite,(screen_width-monster.sprite.get_width()-10,450))
+
             pygame.display.flip()
             if character.alive:
                 action = choose_action(party,monster)
@@ -573,4 +617,5 @@ def choose_action(party,monster):
 # main character overhead sprite credits: ArMM1998, hosted by OpenGameArt.org
 # character sprite credits: wulax, hosted by OpenGameArt.org
 
-StartGame()
+if __name__ =="__main__":
+    StartGame()
