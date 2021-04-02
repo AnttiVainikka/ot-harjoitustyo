@@ -86,6 +86,7 @@ class MainCharacter(Character):
         self.left = False
         self.up = False
         self.down = False
+        self.direction = 2
 
 
     def move_right(self):
@@ -112,7 +113,7 @@ class MainCharacter(Character):
 
 class Monster(Character):
 
-    def __init__(self, name :str, over_sprite, sprite, attack :list, defense :list, hit_points :list, level: list, speed :int, x :int, y :int):
+    def __init__(self, name :str, over_sprite, sprite, attack :list, defense :list, hit_points :list, level: list, speed :int,):
 
         self.name = name
         self.sprite = sprite
@@ -124,8 +125,8 @@ class Monster(Character):
         self.taken_dmg = 0
 
         self.over_sprite = over_sprite
-        self.x = x
-        self.y = y
+        self.x = randint(wall+10,screen_width-wall-self.over_sprite.get_width()-10)
+        self.y = randint(wall+10,screen_height-wall-self.over_sprite.get_height()-10)
         self.right = False
         self.left = False
         self.up = False
@@ -140,7 +141,22 @@ class Monster(Character):
         if cordinate == "y":
             self.speed_y = -self.speed_y
     
+class Boss(Character):
 
+    def __init__(self,name :str, over_sprite, sprite, attack :list, defense :list, hit_points :list, level :list, x :int, y :int):
+
+        self.name = name
+        self.sprite = sprite
+        self.atk = attack
+        self.df = defense
+        self.hp = hit_points
+        self.level = level
+        self.alive = True
+        self.taken_dmg = 0   
+
+        self.over_sprite = over_sprite
+        self.x = x
+        self.y = y
 
 class Area():
     def __init__(self,background):
@@ -150,6 +166,14 @@ class Area():
         self.top = None
         self.background = background
         self.monsters = randint(0,6)
+        self.start = False
+        self.boss = False
+    
+    def set_start_location(self):
+        self.start = True
+    
+    def set_boss_room(self):
+        self.boss = True
     
     def set_neighbours(self,left,right,top,bottom):
         self.left = left
@@ -158,41 +182,82 @@ class Area():
         self.bottom = bottom
         
     
-    def activate(self,party :list, monsters: list):
+    def activate(self,party :list, monsters: list, boss):
+        
         area_monsters = []
-        for i in range(self.monsters):
-            area_monsters.append(monsters[i])
-
+        if self.start == False and self.boss == False: 
+            for i in range(self.monsters):
+                area_monsters.append(monsters[i])
+        countdown = 0
         while True:
             window.fill((0,0,0))
             window.blit(self.background,(0,0))
             move(party[0],area_monsters)
 
-            if party[0].right and party[0].x <= screen_width-party[0].over_sprite.get_width()-wall:
-                party[0].x += 6
-            if party[0].left and party[0].x >= wall:
-                party[0].x -= 6
-            if party[0].up and party[0].y >= wall:
-                party[0].y -= 6
-            if party[0].down and party[0].y <= screen_height-party[0].over_sprite.get_height()-wall:
-                party[0].y += 6 
+            character_width = party[0].over_sprite[party[0].direction][countdown].get_width()
+            character_height = party[0].over_sprite[party[0].direction][countdown].get_height()
 
-            if party[0].right and party[0].x + 6 > screen_width-party[0].over_sprite.get_width()-wall and door_tall < party[0].y < screen_height - door_tall:
+            if self.boss:
+                window.blit(boss.over_sprite, (boss.x, boss.y))
+
+            if party[0].left and party[0].x >= wall and party[0].up == False and party[0].down == False:
+                party[0].x -= 6
+                countdown += 1
+                party[0].direction = 0
+
+            if party[0].left and party[0].x >= wall and (party[0].up or party[0].down):
+                party[0].x -= 4
+                countdown += 1
+                party[0].direction = 0
+
+            if party[0].right and party[0].x <= screen_width-character_width-wall and party[0].up == False and party[0].down == False:
+                party[0].x += 6
+                countdown += 1
+                party[0].direction = 1
+            
+            if party[0].right and party[0].x <= screen_width-character_width-wall and (party[0].up or party[0].down):
+                party[0].x += 4
+                countdown += 1
+                party[0].direction = 1
+
+            if party[0].up and party[0].y >= wall and party[0].right == False and party[0].left == False:
+                party[0].y -= 6
+                countdown += 1
+                party[0].direction = 2
+            
+            if party[0].up and party[0].y >= wall and (party[0].right or party[0].left):
+                party[0].y -= 4
+                countdown += 1
+                party[0].direction = 2
+
+            if party[0].down and party[0].y <= screen_height-character_height-wall and party[0].right == False and party[0].left == False:
+                party[0].y += 6 
+                countdown += 1
+                party[0].direction = 3
+            
+            if party[0].down and party[0].y <= screen_height-character_height-wall and (party[0].right or party[0].left):
+                party[0].y += 4
+                countdown += 1
+                party[0].direction = 3
+
+
+
+            if party[0].right and party[0].x + 6 > screen_width-character_width-wall and door_tall < party[0].y < screen_height - door_tall:
                 if self.right != None:
-                    party[0].x = 0
-                    self.right.activate(party,monsters)
+                    party[0].x = wall
+                    self.right.activate(party,monsters,boss)
             if party[0].left and party[0].x - 6 < wall and door_tall < party[0].y < screen_height - door_tall:
                 if self.left != None:
-                    party[0].x = screen_width
-                    self.left.activate(party,monsters)
+                    party[0].x = screen_width-wall-character_width
+                    self.left.activate(party,monsters,boss)
             if party[0].up and party[0].y - 6 < wall and door_wide < party[0].x < screen_width - door_wide:
                 if self.top != None:
-                    party[0].y = screen_height
-                    self.top.activate(party,monsters)
-            if party[0].down and party[0].y + 6 > screen_height-party[0].over_sprite.get_height()-wall and door_wide < party[0].x < screen_width - door_wide:
+                    party[0].y = screen_height-wall-character_height
+                    self.top.activate(party,monsters,boss)
+            if party[0].down and party[0].y + 6 > screen_height-character_height-wall and door_wide < party[0].x < screen_width - door_wide:
                 if self.bottom != None:
-                    party[0].y = 0
-                    self.bottom.activate(party,monsters)
+                    party[0].y = wall
+                    self.bottom.activate(party,monsters,boss)
 
             if len(area_monsters) != 0:
                 for monster in area_monsters:
@@ -208,7 +273,7 @@ class Area():
                         monster.change_speed("y")  
                     window.blit(monster.over_sprite, (monster.x, monster.y))
 
-                    if monster.x-party[0].over_sprite.get_width()/2 <= party[0].x+party[0].over_sprite.get_width()/2 <= monster.x+monster.over_sprite.get_width()+party[0].over_sprite.get_width()/2 and monster.y-party[0].over_sprite.get_height()/2 <= party[0].y+party[0].over_sprite.get_height()/2 <= monster.y+monster.over_sprite.get_height()+party[0].over_sprite.get_height()/2:
+                    if monster.x-character_width/2 <= party[0].x+character_width/2 <= monster.x+monster.over_sprite.get_width()+character_width/2 and monster.y-character_height/2 <= party[0].y+character_height/2 <= monster.y+monster.over_sprite.get_height()+character_height/2:
                         battle(party,monster)
                         for character in party:
                             character.give_exp(monster.level[0]*50)
@@ -219,11 +284,11 @@ class Area():
                         party[0].left = False
                         party[0].up = False
                         party[0].down = False
-
-            window.blit(party[0].over_sprite, (party[0].x, party[0].y))
-            
+            if countdown > 27:
+                countdown = 0
+            window.blit(party[0].over_sprite[party[0].direction][countdown],(party[0].x,party[0].y))
             pygame.display.flip()
-            clock.tick(60)
+            clock.tick(50)
 
 
 
@@ -232,16 +297,23 @@ class StartGame():
         self.party = []
         self.start = Area(pygame.image.load("Sprites/background_closed.png"))
         self.monsters = []
+        self.boss = ""
         self.generate_map()
         self.choose_party()
         self.pick_monsters()
 
-        self.start.activate(self.party,self.monsters)
+        self.start.activate(self.party,self.monsters,self.boss)
     
     def generate_map(self):
         pick = 1
 
         if pick == 1:
+            self.boss = Boss("Necromancer",pygame.image.load("Sprites/necromancer1.png"),pygame.image.load("Sprites/necromancer2.png"),
+            [12,17,21,28,42,60,80,98,132,180],
+            [10,14,18,24,33,48,60,74,92,120],
+            [120,170,210,280,420,600,800,980,1220,1500],
+            [1,0,0],screen_width/2-pygame.image.load("Sprites/necromancer1.png").get_width()/2,screen_height-pygame.image.load("Sprites/necromancer1.png").get_height()-wall)
+
             self.start = Area(pygame.image.load("Sprites/background_top.png"))
             area1 = Area(pygame.image.load("Sprites/background_left_right_bottom.png"))
             area2 = Area(pygame.image.load("Sprites/background_right_top.png"))
@@ -310,28 +382,116 @@ class StartGame():
             area31.set_neighbours(area7,area19,None,None)
             boss.set_neighbours(None,None,area30,None)
 
+            self.start.set_start_location()
+            boss.set_boss_room()
+
+            
 
     def choose_party(self):
-        Leon = MainCharacter("Leon",pygame.image.load("Sprites/standing.png"),"sprite",[1200,1700,21,28,42,60,80,98,132,180],[10,14,18,24,33,48,60,74,92,120],[120,170,210,280,420,600,800,980,1220,1500],screen_width/2,screen_height/2)
-        Lise = MainCharacter("Lise",pygame.image.load("Sprites/standing.png"),"sprite",[12,17,21,28,42,60,80,98,132,180],[10,14,18,24,33,48,60,74,92,120],[120,170,210,280,420,600,800,980,1220,1500],screen_width/2,screen_height/2)
-        Tank = Character("Tank","sprite",[3,5,8,14,19,26,42,58,70,88],[18,25,33,50,72,94,118,142,180,240],[240,320,500,680,840,1020,1300,1580,1880,2400])
-        Archer = Character("Archer","sprite",[9,14,18,24,36,52,72,88,102,144],[4,9,15,21,30,36,50,66,84,112],[80,120,200,350,490,600,720,910,1080,1320])
-        Wizard = Character("Wizard","sprite",[4,8,13,20,28,36,50,72,98,120],[18,25,33,50,72,94,118,142,180,240],[240,320,500,680,840,1020,1300,1580,1880,2400])
-        Berserker = Character("Berserker","sprite",[3,5,8,14,19,26,42,58,70,88],[18,25,33,50,72,94,118,142,180,240],[240,320,500,680,840,1020,1300,1580,1880,2400])
+        
+        walking_left = [pygame.image.load("Sprites/stand_left.png")]
+        walking_right = [pygame.image.load("Sprites/stand_right.png")]
+        walking_top = [pygame.image.load("Sprites/stand_top.png")]
+        walking_down = [pygame.image.load("Sprites/stand_bot.png")]
+        
+        for i in range(7):
+            walking_left.append(pygame.image.load("Sprites/step_left.png"))
+            walking_right.append(pygame.image.load("Sprites/step_right.png"))
+            walking_top.append(pygame.image.load("Sprites/step_top.png"))
+            walking_down.append(pygame.image.load("Sprites/step_bot.png"))
+        for i in range(7):
+            walking_left.append(pygame.image.load("Sprites/stand_left.png"))
+            walking_right.append(pygame.image.load("Sprites/stand_right.png"))
+            walking_top.append(pygame.image.load("Sprites/stand_top.png"))
+            walking_down.append(pygame.image.load("Sprites/stand_bot.png"))
+        for i in range(7):
+            walking_left.append(pygame.image.load("Sprites/step_left2.png"))
+            walking_right.append(pygame.image.load("Sprites/step_right2.png"))
+            walking_top.append(pygame.image.load("Sprites/step_top2.png"))
+            walking_down.append(pygame.image.load("Sprites/step_bot2.png"))
+        for i in range(7):
+            walking_left.append(pygame.image.load("Sprites/stand_left.png"))
+            walking_right.append(pygame.image.load("Sprites/stand_right.png"))
+            walking_top.append(pygame.image.load("Sprites/stand_top.png"))
+            walking_down.append(pygame.image.load("Sprites/stand_bot.png"))
 
-        self.party.append(Leon)
-        self.party.append(Tank)
+        walking_animation = [walking_left,walking_right,walking_top,walking_down]
+
+
+        main_character = MainCharacter("Leon",walking_animation,pygame.image.load("Sprites/main_character.png"),
+        [1200,1700,21,28,42,60,80,98,132,180],
+        [10,14,18,24,33,48,60,74,92,120],
+        [120,170,210,280,420,600,800,980,1220,1500],
+        screen_width/2,screen_height/2)
+
+        Knight = Character("Knight",pygame.image.load("Sprites/knight.png"),
+        [3,5,8,14,19,26,42,58,70,88],
+        [18,25,33,50,72,94,118,142,180,240],
+        [240,320,500,680,840,1020,1300,1580,1880,2400])
+        
+        Archer = Character("Archer",pygame.image.load("Sprites/archer.png"),
+        [9,14,18,24,36,52,72,88,102,144],
+        [4,9,15,21,30,36,50,66,84,112],
+        [80,120,200,350,490,600,720,910,1080,1320])
+        
+        Wizard = Character("Wizard",pygame.image.load("Sprites/wizard.png"),
+        [4,8,13,20,28,36,50,72,98,120],
+        [18,25,33,50,72,94,118,142,180,240],
+        [240,320,500,680,840,1020,1300,1580,1880,2400])
+        
+        Assassin = Character("Assassin",pygame.image.load("Sprites/assassin.png"),
+        [3,5,8,14,19,26,42,58,70,88],
+        [18,25,33,50,72,94,118,142,180,240],
+        [240,320,500,680,840,1020,1300,1580,1880,2400])
+
+        Monk = Character("Monk",pygame.image.load("Sprites/monk.png"),
+        [3,5,8,14,19,26,42,58,70,88],
+        [18,25,33,50,72,94,118,142,180,240],
+        [240,320,500,680,840,1020,1300,1580,1880,2400])
+
+        self.party.append(main_character)
+        self.party.append(Knight)
         self.party.append(Wizard)
         self.party.append(Archer)
     
 
     def pick_monsters(self):
-        monster1 = Monster("Monnie",pygame.image.load("Sprites/standing.png"),"sprite",[12,17,21,28,42,60,80,98,132,180],[10,14,18,24,33,48,60,74,92,120],[120,170,210,280,420,600,800,980,1220,1500],[1,0,0],2,100,100)
-        monster2 = Monster("Monnie",pygame.image.load("Sprites/standing.png"),"sprite",[12,17,21,28,42,60,80,98,132,180],[10,14,18,24,33,48,60,74,92,120],[120,170,210,280,420,600,800,980,1220,1500],[1,0,0],2,200,100)
-        monster3 = Monster("Monnie",pygame.image.load("Sprites/standing.png"),"sprite",[12,17,21,28,42,60,80,98,132,180],[10,14,18,24,33,48,60,74,92,120],[120,170,210,280,420,600,800,980,1220,1500],[1,0,0],2,300,100)
-        monster4 = Monster("Monnie",pygame.image.load("Sprites/standing.png"),"sprite",[12,17,21,28,42,60,80,98,132,180],[10,14,18,24,33,48,60,74,92,120],[120,170,210,280,420,600,800,980,1220,1500],[1,0,0],2,400,100)
-        monster5 = Monster("Monnie",pygame.image.load("Sprites/standing.png"),"sprite",[12,17,21,28,42,60,80,98,132,180],[10,14,18,24,33,48,60,74,92,120],[120,170,210,280,420,600,800,980,1220,1500],[1,0,0],2,500,100)
-        monster6 = Monster("Monnie",pygame.image.load("Sprites/standing.png"),"sprite",[12,17,21,28,42,60,80,98,132,180],[10,14,18,24,33,48,60,74,92,120],[120,170,210,280,420,600,800,980,1220,1500],[1,0,0],2,600,100)
+
+        monster1 = Monster("Demon Assassin",pygame.image.load("Sprites/demon.png"),pygame.image.load("Sprites/demon.png"),
+        [12,17,21,28,42,60,80,98,132,180],
+        [10,14,18,24,33,48,60,74,92,120],
+        [120,170,210,280,420,600,800,980,1220,1500],
+        [1,0,0],6)
+
+        monster2 = Monster("Beholder",pygame.image.load("Sprites/eyeball.png"),pygame.image.load("Sprites/eyeball.png"),
+        [12,17,21,28,42,60,80,98,132,180],
+        [10,14,18,24,33,48,60,74,92,120],
+        [120,170,210,280,420,600,800,980,1220,1500],
+        [1,0,0],4)
+
+        monster3 = Monster("Goblin Soldier",pygame.image.load("Sprites/goblin.png"),pygame.image.load("Sprites/goblin.png"),
+        [12,17,21,28,42,60,80,98,132,180],#atk
+        [10,14,18,24,33,48,60,74,92,120], #def
+        [120,170,210,280,420,600,800,980,1220,1500], #hp
+        [1,0,0],4)
+
+        monster4 = Monster("Skeleton Warrior",pygame.image.load("Sprites/skeleton.png"),pygame.image.load("Sprites/skeleton.png"),
+        [12,17,21,28,42,60,80,98,132,180],
+        [10,14,18,24,33,48,60,74,92,120],
+        [120,170,210,280,420,600,800,980,1220,1500],
+        [1,0,0],3)
+
+        monster5 = Monster("Warlock",pygame.image.load("Sprites/warlock.png"),pygame.image.load("Sprites/warlock.png"),
+        [12,17,21,28,42,60,80,98,132,180],
+        [10,14,18,24,33,48,60,74,92,120],
+        [120,170,210,280,420,600,800,980,1220,1500],
+        [1,0,0],2)
+
+        monster6 = Monster("Dragonling",pygame.image.load("Sprites/dragonling.png"),pygame.image.load("Sprites/dragonling.png"),
+        [12,17,21,28,42,60,80,98,132,180],
+        [10,14,18,24,33,48,60,74,92,120],
+        [120,170,210,280,420,600,800,980,1220,1500],
+        [1,0,0],5)
         
         self.monsters.append(monster1)
         self.monsters.append(monster2)
@@ -409,6 +569,8 @@ def choose_action(party,monster):
                 if event.key == pygame.K_4:
                     return 4
 
-
+# monster design credits: Stephen "Redshrike" Challener, hosted by OpenGameArt.org
+# main character overhead sprite credits: ArMM1998, hosted by OpenGameArt.org
+# character sprite credits: wulax, hosted by OpenGameArt.org
 
 StartGame()
