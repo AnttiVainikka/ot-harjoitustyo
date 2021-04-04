@@ -1,9 +1,12 @@
 import pygame
 from random import randint
+#import sqlite3
+
+#db = sqlite3.connect("characters.db")
+#db.isolation_level = None
 pygame.init()
 clock = pygame.time.Clock()
 pygame.display.set_caption("A Game of Dissappearing Bears (working title)")
-
 
 
 class Character():

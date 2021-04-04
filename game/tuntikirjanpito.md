@@ -6,3 +6,4 @@ Päivämäärä  |  Aika  |  Mitä tehty
 19.3  |  4h  |   backgroundien ja ensimmäisen kartan luominen
 1.4   |  8h  |   spritejen etsiminen netistä ja niitten käyttöönotto, bossien luominen
 2.4   |  4h  |   koodin parantelu, taistelu-näkymän kehitys, automaattisten testien parantelu ja lisäys
+4.4   |  5h  |   tietokannan luominen hahmojen ja taitojen tietoja varten
