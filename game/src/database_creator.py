@@ -30,7 +30,7 @@ def characters():
     [5,9,14,22,30,38,52,62,74,82], #mdef
     [120,180,240,450,640,820,940,1120,1360,1540], #hp
     [24,32,44,55,64,72,88,98,112,124], #mp
-    ["Power Strike","Fireball","Charge","Shockwave","Ray of Destruction","Deadly Strike"], #skills
+    ["Power Strike","Fireball","Charge","Shockwave","Ray of Judgement","Deadly Strike"], #skills
     [1,2,3,5,8,10] #skill levels
     )
 
@@ -75,9 +75,9 @@ def add_character(name :str,attack :list,defense :list,mdef :list,hp :list,mp :l
 
 def skills():
     add_skill("Power Strike","Strikes the enemy with great power dealing physical damage",1.5,"physical",4,0,0,"attack",0,0,0,0,0)
-    add_skill("Charge","Charges power to deal over twice the damage next turn",2.5,"support",5,0,1,"attack",0,0,0,0,2)
+    add_skill("Charge","Charges power to deal over twice the damage next turn",1.5,"support",5,0,1,"attack",0,0,0,0,2)
     add_skill("Shockwave","Launch a shockwave dealing physical damage to all enemies",1.2,"physical",9,1,0,"attack",0,0,0,0,0)
-    add_skill("Ray of Destruction","Call forth a ray of destruction from the Haevens dealing almighty damage to all enemies",1.5,"almighty",24,1,0,"attack",0,0,0,0,0)
+    add_skill("Ray of Judgement","Call forth a ray of destruction from the sky dealing almighty damage to all enemies",1.5,"almighty",24,1,0,"attack",0,0,0,0,0)
     add_skill("Deadly Strike","Deal massive physical damage to an enemy",7.5,"physical",15,0,0,"attack",0,0,0,0,0)
     add_skill("Piercing Arrow","Shoot a piercing arrow into the enemy ignoring all defenses",1,"almighty",3,0,0,"attack",0,0,0,0,0)
     add_skill("Fusillade","Call a fusillade on the enemy dealing physical damage to all enemies",1.2,"physical",7,1,0,"attack",0,0,0,0,0)
@@ -90,7 +90,7 @@ def skills():
     add_skill("Holy Light","Pray for God to cure a party member healing them moderately",2.5,"support",3,0,1,"defense",1,1,0,0,0)
     add_skill("Raise Defense","Buff the party's defense for 3 turns",0.5,"support",12,1,1,"defense",0,0,0,0,3)
     add_skill("Resurrect","Pray to God to resurrect a party member bringing them back to the fight",0,"support",18,0,0,"none",0,0,0,1,0)
-    add_skill("Raise Attack","Buff the party's attack for 3 turns",1,"support",12,1,1,"attack",0,0,0,0,3)
+    add_skill("Raise Attack","Buff the party's attack for 3 turns",0.5,"support",12,1,1,"attack",0,0,0,0,3)
     add_skill("Salvation","Pray for God's light to heal the entire party",10,"support",30,1,1,"defense",1,1,0,0,0)
 
 

@@ -1,9 +1,9 @@
 import pygame
 from random import randint
-#import sqlite3
+import sqlite3
 
-#db = sqlite3.connect("characters.db")
-#db.isolation_level = None
+db = sqlite3.connect("characters.db")
+db.isolation_level = None
 pygame.init()
 clock = pygame.time.Clock()
 pygame.display.set_caption("A Game of Dissappearing Bears (working title)")
@@ -11,68 +11,103 @@ pygame.display.set_caption("A Game of Dissappearing Bears (working title)")
 
 class Character():
 
-    def __init__(self, name :str, sprite, attack :list, defense :list, hit_points :list):
+    def __init__(self, name :str, sprite):
 
         self.name = name
         self.sprite = sprite
-        self.atk = attack
-        self.df = defense
-        self.hp = hit_points
-        self.level = [0,0,100]
+        self.atk = 0
+        self.df = 0
+        self.mdef = 0
+        self.hp = 0
+        self.mp = 0
+        self.skills = []
+        self.level = [1,0,100]
         self.alive = True
         self.taken_dmg = 0
+        self.used_mp = 0
 
 
     def give_exp(self,exp :int):
-        if self.level[0] < 9:
+        if self.level[0] < 10:
             self.level[1] += exp
             while True:
                 if self.level[1] >= self.level[2]:
-                    self.level[0] += 1
+                    if self.level[0] < 10:
+                        self.level[0] += 1
+                    else:
+                        break
+                    self.level_up(self.level[0])
                     self.level[1] = self.level[1]-self.level[2]
                     self.level[2] += 50
                     self.taken_dmg = 0
                 else:
                     break
-
+    
+    def level_up(self,level):
+        self.taken_dmg = 0
+        self.used_mp = 0
+        self.atk = db.execute("SELECT attack FROM StatValues WHERE level = ? AND character = ?",[level,self.name]).fetchone()[0]
+        self.df = db.execute("SELECT defense FROM StatValues WHERE level = ? AND character = ?",[level,self.name]).fetchone()[0]
+        self.mdef = db.execute("SELECT mdef FROM StatValues WHERE level = ? AND character = ?",[level,self.name]).fetchone()[0]
+        self.hp = db.execute("SELECT hp FROM StatValues WHERE level = ? AND character = ?",[level,self.name]).fetchone()[0]
+        self.mp = db.execute("SELECT mp FROM StatValues WHERE level = ? AND character = ?",[level,self.name]).fetchone()[0]
+        skill = db.execute("SELECT skill FROM LearnSets WHERE level = ? AND character = ?",[level,self.name]).fetchone()
+        if skill != None:
+            self.skills.append(Skill(skill[0]))
+        
 
     def take_dmg(self,damage):
-        if damage >= self.hp[self.level[0]]:
-            self.taken_dmg += self.hp[self.level[0]]
-            self.hp[self.level[0]] = 0
+        if damage >= self.hp:
+            self.taken_dmg += self.hp
+            self.hp = 0
             self.alive = False
         else:
-            self.hp[self.level[0]] -= damage
+            self.hp -= damage
             self.taken_dmg += damage
     
 
     def reset_health(self):
-        self.hp[self.level[0]] += self.taken_dmg
+        self.hp += self.taken_dmg
+        self.mp += self.used_mp
         self.taken_dmg = 0
+        self.used_mp = 0
+
 
     def attack(self,target,skill):
         if skill == 0:
-            damage = self.atk[self.level[0]]-target.df[self.level[0]]//3
+            damage = self.atk-target.df//3
         else:
-            damage = self.atk[self.level[0]] * skill.multiplier - target.df[self.level[0]]//3
+            if skill.type == "physical":
+                damage = self.atk * skill.multiplier - target.df//3
+            if skill.type == "magic":
+                damage = self.atk * skill.multiplier - target.mdef//3  
+            if skill.type == "almighty":
+                damage = self.atk * skill.multiplier 
         if damage <= 0:
             damage = 1
-        target.take_dmg(damage)
-        
+        target.take_dmg(int(damage))
+
+    def choose_character(self,party):
+        party.append(self)
+        self.level_up(1)
 
 
 class MainCharacter(Character):
 
-    def __init__(self, name :str, over_sprite, sprite, attack :int, defense :int, hit_points :int, x :int, y :int):
+    def __init__(self, name :str, over_sprite, sprite, x :int, y :int):
 
         self.name = name
         self.sprite = sprite
-        self.atk = attack
-        self.df = defense
-        self.hp = hit_points
-        self.level = [0,0,100]
+        self.atk = 0
+        self.df = 0
+        self.mdef = 0
+        self.hp = 0
+        self.mp = 0
+        self.skills = []
+        self.level = [1,0,100]
         self.alive = True
         self.taken_dmg = 0
+        self.used_mp = 0
 
         self.over_sprite = over_sprite
         self.x = x
@@ -103,21 +138,26 @@ class MainCharacter(Character):
         self.down = True
     def stop_down(self):
         self.down = False
+        
 
 
 
 class Monster(Character):
 
-    def __init__(self, name :str, over_sprite, sprite, attack :list, defense :list, hit_points :list, level: list, speed :int,):
+    def __init__(self, name :str, over_sprite, sprite, level: list, speed :int,):
 
         self.name = name
         self.sprite = sprite
-        self.atk = attack
-        self.df = defense
-        self.hp = hit_points
+        self.atk = 10
+        self.df = 10
+        self.mdef = 10
+        self.hp = 60000
+        self.mp = 10
+        self.skills = []
         self.level = level
         self.alive = True
         self.taken_dmg = 0
+        self.used_mp = 0
 
         screen_width = pygame.image.load("Sprites/background_full.png").get_width()
         screen_height = pygame.image.load("Sprites/background_full.png").get_height()
@@ -139,19 +179,71 @@ class Monster(Character):
             self.speed_x = -self.speed_x
         if cordinate == "y":
             self.speed_y = -self.speed_y
+
+class Skill():
+
+    def __init__(self,name):
+        self.name = name
+        self.desc = db.execute("SELECT desc FROM Skills WHERE name = ?",[name]).fetchone()[0]
+        self.multiplier = db.execute("SELECT multiplier FROM Skills WHERE name = ?",[name]).fetchone()[0]
+        self.type = db.execute("SELECT type FROM Skills WHERE name = ?",[name]).fetchone()[0]
+        self.cost = db.execute("SELECT cost FROM Skills WHERE name = ?",[name]).fetchone()[0]
+        self.aoe = db.execute("SELECT aoe FROM Skills WHERE name = ?",[name]).fetchone()[0]
+        self.buff = db.execute("SELECT buff FROM Skills WHERE name = ?",[name]).fetchone()[0]
+        self.stat = db.execute("SELECT stat FROM Skills WHERE name = ?",[name]).fetchone()[0]
+        self.recover = db.execute("SELECT recover FROM Skills WHERE name = ?",[name]).fetchone()[0]
+        self.hp = db.execute("SELECT hp FROM Skills WHERE name = ?",[name]).fetchone()[0]
+        self.mp = db.execute("SELECT mp FROM Skills WHERE name = ?",[name]).fetchone()[0]
+        self.resurrect = db.execute("SELECT resurrect FROM Skills WHERE name = ?",[name]).fetchone()[0]
+        self.duration = db.execute("SELECT duration FROM Skills WHERE name = ?",[name]).fetchone()[0]
+        self.user = ""
     
+    def activate(self,character,target):
+        if self.type != "support":
+            character.attack(target,self)
+        if self.buff == 1:
+            if self.stat == "attack":
+                original_attack = db.execute("SELECT attack FROM StatValues WHERE level = ? AND character = ?",[target.level[0],target.name]).fetchone()[0]
+                target.atk += original_attack * self.multiplier
+            if self.stat == "defense":
+                original_defense = db.execute("SELECT defense FROM StatValues WHERE level = ? AND character = ?",[target.level[0],target.name]).fetchone()[0]
+                target.df += original_defense * self.multiplier
+    
+    def deactivate(self,party,monster):
+        for character in party:
+            if self.aoe == 0:
+                if character.name == self.user:
+                    if self.stat == "attack":
+                        original_attack = db.execute("SELECT attack FROM StatValues WHERE level = ? AND character = ?",[character.level[0],character.name]).fetchone()[0]
+                        character.atk -=  original_attack * self.multiplier
+                    if self.stat == "defense":
+                        original_defense = db.execute("SELECT defense FROM StatValues WHERE level = ? AND character = ?",[character.level[0],character.name]).fetchone()[0]
+                        character.df -=  original_defense * self.multiplier      
+            else:
+                if self.stat == "attack":
+                    original_attack = db.execute("SELECT attack FROM StatValues WHERE level = ? AND character = ?",[character.level[0],character.name]).fetchone()[0]
+                    character.atk -=  original_attack * self.multiplier
+                if self.stat == "defense":
+                    original_defense = db.execute("SELECT defense FROM StatValues WHERE level = ? AND character = ?",[character.level[0],character.name]).fetchone()[0]
+                    character.df -=  original_defense * self.multiplier  
+        self.duration = db.execute("SELECT duration FROM Skills WHERE name = ?",[self.name]).fetchone()[0]
+
 class Boss(Character):
 
     def __init__(self,name :str, over_sprite, sprite, attack :list, defense :list, hit_points :list, level :list, x :int, y :int):
 
         self.name = name
         self.sprite = sprite
-        self.atk = attack
-        self.df = defense
-        self.hp = hit_points
+        self.atk = 400
+        self.df = 200
+        self.mdef = 200
+        self.hp = 2000
+        self.mp = 5100
+        self.skills = []
         self.level = level
         self.alive = True
-        self.taken_dmg = 0   
+        self.taken_dmg = 0  
+        self.used_mp = 0 
 
         self.over_sprite = over_sprite
         self.x = x
@@ -439,79 +531,40 @@ class StartGame():
 
 
         main_character = MainCharacter("Leon",walking_animation,pygame.image.load("Sprites/main_character.png"),
-        [1200,1700,21,28,42,60,80,98,132,180],
-        [10,14,18,24,33,48,60,74,92,120],
-        [120,170,210,280,420,600,800,980,1220,1500],
         screen_width/2,screen_height/2)
 
-        Knight = Character("Knight",pygame.image.load("Sprites/knight.png"),
-        [3,5,8,14,19,26,42,58,70,88],
-        [18,25,33,50,72,94,118,142,180,240],
-        [240,320,500,680,840,1020,1300,1580,1880,2400])
+        Knight = Character("Knight",pygame.image.load("Sprites/knight.png"))
         
-        Archer = Character("Archer",pygame.image.load("Sprites/archer.png"),
-        [9,14,18,24,36,52,72,88,102,144],
-        [4,9,15,21,30,36,50,66,84,112],
-        [80,120,200,350,490,600,720,910,1080,1320])
+        Archer = Character("Archer",pygame.image.load("Sprites/archer.png"))
         
-        Wizard = Character("Wizard",pygame.image.load("Sprites/wizard.png"),
-        [4,8,13,20,28,36,50,72,98,120],
-        [18,25,33,50,72,94,118,142,180,240],
-        [240,320,500,680,840,1020,1300,1580,1880,2400])
+        Wizard = Character("Wizard",pygame.image.load("Sprites/wizard.png"))
         
-        Assassin = Character("Assassin",pygame.image.load("Sprites/assassin.png"),
-        [3,5,8,14,19,26,42,58,70,88],
-        [18,25,33,50,72,94,118,142,180,240],
-        [240,320,500,680,840,1020,1300,1580,1880,2400])
+        Assassin = Character("Assassin",pygame.image.load("Sprites/assassin.png"))
 
-        Monk = Character("Monk",pygame.image.load("Sprites/monk.png"),
-        [3,5,8,14,19,26,42,58,70,88],
-        [18,25,33,50,72,94,118,142,180,240],
-        [240,320,500,680,840,1020,1300,1580,1880,2400])
+        Monk = Character("Monk",pygame.image.load("Sprites/monk.png"))
 
-        self.party.append(main_character)
-        self.party.append(Knight)
-        self.party.append(Wizard)
-        self.party.append(Assassin)
+        main_character.choose_character(self.party)
+        Knight.choose_character(self.party)
+        Archer.choose_character(self.party)
+        Wizard.choose_character(self.party)
+
+        for character in self.party:
+            character.give_exp(9001)
     
 
     def pick_monsters(self):
 
-        monster1 = Monster("Demon Assassin",pygame.image.load("Sprites/demon.png"),pygame.image.load("Sprites/demon.png"),
-        [12,17,21,28,42,60,80,98,132,180],
-        [10,14,18,24,33,48,60,74,92,120],
-        [120,170,210,280,420,600,800,980,1220,1500],
-        [1,0,0],6)
+        monster1 = Monster("Demon Assassin",pygame.image.load("Sprites/demon.png"),pygame.image.load("Sprites/demon.png"),[1,0,0],6)
 
-        monster2 = Monster("Beholder",pygame.image.load("Sprites/eyeball.png"),pygame.image.load("Sprites/eyeball.png"),
-        [12,17,21,28,42,60,80,98,132,180],
-        [10,14,18,24,33,48,60,74,92,120],
-        [120,170,210,280,420,600,800,980,1220,1500],
-        [1,0,0],4)
+        monster2 = Monster("Beholder",pygame.image.load("Sprites/eyeball.png"),pygame.image.load("Sprites/eyeball.png"),[1,0,0],4)
 
-        monster3 = Monster("Goblin Soldier",pygame.image.load("Sprites/goblin.png"),pygame.image.load("Sprites/goblin.png"),
-        [12,17,21,28,42,60,80,98,132,180],#atk
-        [10,14,18,24,33,48,60,74,92,120], #def
-        [120,170,210,280,420,600,800,980,1220,1500], #hp
-        [1,0,0],4)
+        monster3 = Monster("Goblin Soldier",pygame.image.load("Sprites/goblin.png"),pygame.image.load("Sprites/goblin.png"),[1,0,0],4)
 
-        monster4 = Monster("Skeleton Warrior",pygame.image.load("Sprites/skeleton.png"),pygame.image.load("Sprites/skeleton.png"),
-        [12,17,21,28,42,60,80,98,132,180],
-        [10,14,18,24,33,48,60,74,92,120],
-        [120,170,210,280,420,600,800,980,1220,1500],
-        [1,0,0],3)
+        monster4 = Monster("Skeleton Warrior",pygame.image.load("Sprites/skeleton.png"),pygame.image.load("Sprites/skeleton.png"),[1,0,0],3)
 
-        monster5 = Monster("Warlock",pygame.image.load("Sprites/warlock.png"),pygame.image.load("Sprites/warlock.png"),
-        [12,17,21,28,42,60,80,98,132,180],
-        [10,14,18,24,33,48,60,74,92,120],
-        [120,170,210,280,420,600,800,980,1220,1500],
-        [1,0,0],2)
+        monster5 = Monster("Warlock",pygame.image.load("Sprites/warlock.png"),pygame.image.load("Sprites/warlock.png"),[1,0,0],2)
 
-        monster6 = Monster("Dragonling",pygame.image.load("Sprites/dragonling.png"),pygame.image.load("Sprites/dragonling.png"),
-        [12,17,21,28,42,60,80,98,132,180],
-        [10,14,18,24,33,48,60,74,92,120],
-        [120,170,210,280,420,600,800,980,1220,1500],
-        [1,0,0],5)
+        monster6 = Monster("Dragonling",pygame.image.load("Sprites/dragonling.png"),pygame.image.load("Sprites/dragonling.png"),[1,0,0],5)
         
         self.monsters.append(monster1)
         self.monsters.append(monster2)
@@ -553,52 +606,74 @@ def collision(character,monster,countdown):
         return True
 
 def battle(party,monster):
-    screen_width = pygame.image.load("Sprites/background_full.png").get_width()
-    screen_height = pygame.image.load("Sprites/background_full.png").get_height()
-    wall = pygame.image.load("Sprites/wall_length.png").get_height()
-    door_wide = pygame.image.load("Sprites/wide_length_door.png").get_width()
-    door_tall = pygame.image.load("Sprites/tall_length_door.png").get_height()
-
-    window = pygame.display.set_mode((screen_width, screen_height))
-        
-    font = pygame.font.SysFont("Arial", 25)
-    big_font = pygame.font.SysFont("Arial", 50)
-
+    active_skills = []
     while True:
+        for skill in active_skills:
+            skill.duration -= 1
+            if skill.duration == 0:
+                skill.deactivate(party,monster)
+                active_skills.remove(skill)
         for character in party:
-            window.fill((0, 0, 0))
-            window.blit(font.render(f"{monster.name}:   {monster.hp[monster.level[0]]}/{monster.hp[monster.level[0]]+monster.taken_dmg}", True, (200, 0, 0)), (20, 0))
-
-            window.blit(font.render(character.name, True, (200,200,200)),(0,screen_height-125))
-            window.blit(font.render("1. Attack", True, (200,200,200)),(0,screen_height-100))
-            window.blit(font.render("2. Skill", True, (200,200,200)),(0,screen_height-75))
-            window.blit(font.render("3. Item", True, (200,200,200)),(0,screen_height-50))
-            window.blit(font.render("4. Run", True, (200,200,200)),(0,screen_height-25))
-
-            for i in range(0,4):
-                window.blit(font.render(party[i].name, True, (0,200,0)),(300,screen_height-100+i*25))
-                window.blit(font.render(f"HP  {party[i].hp[party[i].level[0]]}/{party[i].hp[party[i].level[0]]+party[i].taken_dmg}", True, (0,200,0)),(500,screen_height-100+i*25))
-                window.blit(font.render("MP  0/0", True, (0,200,0)),(750,screen_height-100+i*25))
-                window.blit(font.render(f"LVL  {party[i].level[0]+1}/10", True, (0,200,0)),(950,screen_height-100+i*25))
-                window.blit(party[i].sprite,(i*10+10,300+i*100))
-
-            window.blit(monster.sprite,(screen_width-monster.sprite.get_width()-10,450))
-
-            pygame.display.flip()
             if character.alive:
-                action = choose_action(party,monster)
+                while True:
+                    render_battle(party,monster,character,"battle")
 
-                if action == 1:
-                    character.attack(monster,0)
+                    while True:
+                        action = choose_action("battle")
+                        if 1 <= action <= 4:
+                            break
+
+                    if action == 1:
+                        character.attack(monster,0)
+                        break       
+                     
+                    if action == 2:
+                        render_battle(party,monster,character,"choose_skill")
+                        while True:
+                            choice = choose_action("choose skill")
+                            if choice <= len(character.skills):
+                                break
+                        if choice != 0:
+                            if character.mp - character.skills[choice-1].cost >= 0:
+                                skill = character.skills[choice-1]
+                                character.mp -= skill.cost
+                                character.used_mp += skill.cost
+                                if skill.aoe == 0:
+                                    if skill.buff == 0:
+                                        #target = choose_action("battle")
+                                        skill.activate(character,monster)
+                                    else:
+                                        if skill in active_skills:
+                                            skill.deactivate(party,monster)
+                                            active_skills.remove(skill)
+                                        skill.activate(character,character)
+                                        skill.user = character.name
+                                        active_skills.append(skill)
+                                else:
+                                    if skill.buff == 0:
+                                        skill.activate(character,monster)
+                                    else:
+                                        if skill in active_skills:
+                                            skill.deactivate(party,monster)
+                                            active_skills.remove(skill)
+                                        for party_member in party:
+                                            skill.activate(character,party_member)
+                                        active_skills.append(skill)
+                                break
 
             if monster.alive == False:
+                for skill in active_skills:
+                    skill.deactivate(party,monster)
                 return
-
-        monster.attack(party[randint(0,3)],0)
+        while True:
+            target = randint(0,3)
+            if party[target].alive:
+                break
+        monster.attack(party[target],0)
 
         
 
-def choose_action(party,monster):
+def choose_action(setting):
     while True:
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
@@ -615,7 +690,65 @@ def choose_action(party,monster):
             if event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_4:
                     return 4
+            if event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_5:
+                    return 5
+            if event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_6:
+                    return 6
+            if event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_7:
+                    return 7
+            if event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_8:
+                    return 8
+            if setting == "choose skill":
+                if event.type == pygame.KEYDOWN:
+                    if event.key == pygame.K_r:
+                        return 0
 
+
+def render_battle(party,monster,character,setting):
+    screen_width = pygame.image.load("Sprites/background_full.png").get_width()
+    screen_height = pygame.image.load("Sprites/background_full.png").get_height()
+    window = pygame.display.set_mode((screen_width, screen_height)) 
+    font = pygame.font.SysFont("Arial", 25)
+    window.fill((0, 0, 0))
+    window.blit(font.render(f"{monster.name}:   {monster.hp}/{monster.hp+monster.taken_dmg}", True, (200, 0, 0)), (20, 0))
+    window.blit(font.render(character.name, True, (200,200,200)),(0,screen_height-125))
+    window.blit(monster.sprite,(screen_width-monster.sprite.get_width()-10,450))
+
+    for i in range(0,4):
+            window.blit(party[i].sprite,(i*10+10,300+i*100))
+
+    if setting == "battle":
+        window.blit(font.render("1. Attack", True, (200,200,200)),(0,screen_height-100))
+        window.blit(font.render("2. Skill", True, (200,200,200)),(0,screen_height-75))
+        window.blit(font.render("3. Item", True, (200,200,200)),(0,screen_height-50))
+        window.blit(font.render("4. Run", True, (200,200,200)),(0,screen_height-25))
+
+        for i in range(0,4):
+            window.blit(font.render(party[i].name, True, (0,200,0)),(250,screen_height-100+i*25))
+            window.blit(font.render(f"HP  {party[i].hp}/{party[i].hp+party[i].taken_dmg}", True, (0,200,0)),(450,screen_height-100+i*25))
+            window.blit(font.render(f"MP  {party[i].mp}/{party[i].mp+party[i].used_mp}", True, (0,200,0)),(700,screen_height-100+i*25))
+            window.blit(font.render(f"LVL  {party[i].level[0]}/10", True, (0,200,0)),(900,screen_height-100+i*25))
+            #window.blit(font.render(f"ATK  {party[i].atk}", True, (0,200,0)),(900,screen_height-100+i*25))
+
+    if setting == "choose_skill":
+        counter = 0
+        for skill in character.skills:
+            if counter < 4:
+                window.blit(font.render(f"{counter+1}. {skill.name}  ({skill.cost} MP)", True, (200,200,200)),(0,screen_height-100+counter*25))
+            else:
+                window.blit(font.render(f"{counter+1}. {skill.name}  ({skill.cost} MP)", True, (200,200,200)),(300,screen_height-200+counter*25))
+            counter += 1
+    
+
+    pygame.display.flip()
+
+
+    
+        
 # monster design credits: Stephen "Redshrike" Challener, hosted by OpenGameArt.org
 # main character overhead sprite credits: ArMM1998, hosted by OpenGameArt.org
 # character sprite credits: wulax, hosted by OpenGameArt.org

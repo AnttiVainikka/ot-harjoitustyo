@@ -7,3 +7,5 @@ Päivämäärä  |  Aika  |  Mitä tehty
 1.4   |  8h  |   spritejen etsiminen netistä ja niitten käyttöönotto, bossien luominen
 2.4   |  4h  |   koodin parantelu, taistelu-näkymän kehitys, automaattisten testien parantelu ja lisäys
 4.4   |  5h  |   tietokannan luominen hahmojen ja taitojen tietoja varten
+5.4   |  4h  |   tietokannan käyttöönotto pääkoodissa ja taito-olioden luominen
+6.4   |  3h  |   taitojen käyttöönotto taisteluissa ja taisteluiden koodin parantelua
