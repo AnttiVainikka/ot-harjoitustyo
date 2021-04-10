@@ -9,3 +9,4 @@ Päivämäärä  |  Aika  |  Mitä tehty
 4.4   |  5h  |   tietokannan luominen hahmojen ja taitojen tietoja varten
 5.4   |  4h  |   tietokannan käyttöönotto pääkoodissa ja taito-olioden luominen
 6.4   |  3h  |   taitojen käyttöönotto taisteluissa ja taisteluiden koodin parantelua
+11.4  |  1h  |   poetry run invoke komentojen käyttöönotto ja testien päivittäminen

@@ -2,11 +2,19 @@ import pygame
 from random import randint
 import sqlite3
 
-db = sqlite3.connect("characters.db")
+db = sqlite3.connect("src/characters.db")
 db.isolation_level = None
 pygame.init()
 clock = pygame.time.Clock()
-pygame.display.set_caption("A Game of Dissappearing Bears (working title)")
+pygame.display.set_caption("Dungeon Crawler")
+
+screen_width = pygame.image.load("src/Sprites/background_full.png").get_width()
+screen_height = pygame.image.load("src/Sprites/background_full.png").get_height()
+wall = pygame.image.load("src/Sprites/wall_length.png").get_height()
+door_wide = pygame.image.load("src/Sprites/wide_length_door.png").get_width()
+door_tall = pygame.image.load("src/Sprites/tall_length_door.png").get_height()
+window = pygame.display.set_mode((screen_width, screen_height)) 
+font = pygame.font.SysFont("Arial", 25)
 
 
 class Character():
@@ -151,7 +159,7 @@ class Monster(Character):
         self.atk = 10
         self.df = 10
         self.mdef = 10
-        self.hp = 60000
+        self.hp = 600
         self.mp = 10
         self.skills = []
         self.level = level
@@ -159,9 +167,9 @@ class Monster(Character):
         self.taken_dmg = 0
         self.used_mp = 0
 
-        screen_width = pygame.image.load("Sprites/background_full.png").get_width()
-        screen_height = pygame.image.load("Sprites/background_full.png").get_height()
-        wall = pygame.image.load("Sprites/wall_length.png").get_height()
+        screen_width = pygame.image.load("src/Sprites/background_full.png").get_width()
+        screen_height = pygame.image.load("src/Sprites/background_full.png").get_height()
+        wall = pygame.image.load("src/Sprites/wall_length.png").get_height()
 
         self.over_sprite = over_sprite
         self.x = randint(wall+10,screen_width-wall-self.over_sprite.get_width()-10)
@@ -272,20 +280,7 @@ class Area():
         self.top = top
         self.bottom = bottom
     
-    def activate(self,party :list, monsters: list, boss):
-        
-        screen_width = pygame.image.load("Sprites/background_full.png").get_width()
-        screen_height = pygame.image.load("Sprites/background_full.png").get_height()
-        wall = pygame.image.load("Sprites/wall_length.png").get_height()
-        door_wide = pygame.image.load("Sprites/wide_length_door.png").get_width()
-        door_tall = pygame.image.load("Sprites/tall_length_door.png").get_height()
-
-        window = pygame.display.set_mode((screen_width, screen_height))
-        
-
-        font = pygame.font.SysFont("Arial", 25)
-        big_font = pygame.font.SysFont("Arial", 50)
-        
+    def activate(self,party :list, monsters: list, boss):  
         area_monsters = []
         if self.start == False and self.boss == False: 
             for i in range(self.monsters):
@@ -400,7 +395,7 @@ class Area():
 class StartGame():
     def __init__(self):
         self.party = []
-        self.start = Area(pygame.image.load("Sprites/background_closed.png"))
+        self.start = Area(pygame.image.load("src/Sprites/background_closed.png"))
         self.monsters = []
         self.boss = ""
         self.generate_map()
@@ -411,50 +406,47 @@ class StartGame():
     
     def generate_map(self):
         pick = 1
-        screen_width = pygame.image.load("Sprites/background_full.png").get_width()
-        screen_height = pygame.image.load("Sprites/background_full.png").get_height()
-        wall = pygame.image.load("Sprites/wall_length.png").get_height()
 
         if pick == 1:
-            self.boss = Boss("Necromancer",pygame.image.load("Sprites/necromancer1.png"),pygame.image.load("Sprites/necromancer2.png"),
+            self.boss = Boss("Necromancer",pygame.image.load("src/Sprites/necromancer1.png"),pygame.image.load("src/Sprites/necromancer2.png"),
             [12,17,21,28,42,60,80,98,132,180],
             [10,14,18,24,33,48,60,74,92,120],
             [120,170,210,280,420,600,800,980,1220,1500],
-            [1,0,0],screen_width/2-pygame.image.load("Sprites/necromancer1.png").get_width()/2,screen_height-pygame.image.load("Sprites/necromancer1.png").get_height()-wall)
+            [1,0,0],screen_width/2-pygame.image.load("src/Sprites/necromancer1.png").get_width()/2,screen_height-pygame.image.load("src/Sprites/necromancer1.png").get_height()-wall)
 
-            self.start = Area(pygame.image.load("Sprites/background_top.png"))
-            area1 = Area(pygame.image.load("Sprites/background_left_right_bottom.png"))
-            area2 = Area(pygame.image.load("Sprites/background_right_top.png"))
-            area3 = Area(pygame.image.load("Sprites/background_left_right.png"))
-            area4 = Area(pygame.image.load("Sprites/background_top_bottom.png"))
-            area5 = Area(pygame.image.load("Sprites/background_left_top.png"))
-            area6 = Area(pygame.image.load("Sprites/background_full.png"))
-            area7 = Area(pygame.image.load("Sprites/background_right_top_bottom.png"))
-            area8 = Area(pygame.image.load("Sprites/background_top_bottom.png"))
-            area9 = Area(pygame.image.load("Sprites/background_top_bottom.png"))
-            area10 = Area(pygame.image.load("Sprites/background_left.png"))
-            area11 = Area(pygame.image.load("Sprites/background_right_bottom.png"))
-            area12 = Area(pygame.image.load("Sprites/background_top_bottom.png"))
-            area13 = Area(pygame.image.load("Sprites/background_left_right.png"))
-            area14 = Area(pygame.image.load("Sprites/background_left_bottom.png"))
-            area15 = Area(pygame.image.load("Sprites/background_left_bottom.png"))
-            area16 = Area(pygame.image.load("Sprites/background_left_right.png"))
-            area17 = Area(pygame.image.load("Sprites/background_top_bottom.png"))
-            area18 = Area(pygame.image.load("Sprites/background_right_bottom.png"))
-            area19 = Area(pygame.image.load("Sprites/background_left_top.png"))
-            area20 = Area(pygame.image.load("Sprites/background_top_bottom.png"))
-            area21 = Area(pygame.image.load("Sprites/background_left_top_bottom.png"))
-            area22 = Area(pygame.image.load("Sprites/background_right_top_bottom.png"))
-            area23 = Area(pygame.image.load("Sprites/background_left_right.png"))
-            area24 = Area(pygame.image.load("Sprites/background_left_top.png"))
-            area25 = Area(pygame.image.load("Sprites/background_left_right.png"))
-            area26 = Area(pygame.image.load("Sprites/background_left_right_bottom.png"))
-            area27 = Area(pygame.image.load("Sprites/background_right_bottom.png"))
-            area28 = Area(pygame.image.load("Sprites/background_right_top.png"))
-            area29 = Area(pygame.image.load("Sprites/background_top_bottom.png"))
-            area30 = Area(pygame.image.load("Sprites/background_top_bottom.png"))
-            area31 = Area(pygame.image.load("Sprites/background_left_right.png"))
-            boss = Area(pygame.image.load("Sprites/background_top.png"))
+            self.start = Area(pygame.image.load("src/Sprites/background_top.png"))
+            area1 = Area(pygame.image.load("src/Sprites/background_left_right_bottom.png"))
+            area2 = Area(pygame.image.load("src/Sprites/background_right_top.png"))
+            area3 = Area(pygame.image.load("src/Sprites/background_left_right.png"))
+            area4 = Area(pygame.image.load("src/Sprites/background_top_bottom.png"))
+            area5 = Area(pygame.image.load("src/Sprites/background_left_top.png"))
+            area6 = Area(pygame.image.load("src/Sprites/background_full.png"))
+            area7 = Area(pygame.image.load("src/Sprites/background_right_top_bottom.png"))
+            area8 = Area(pygame.image.load("src/Sprites/background_top_bottom.png"))
+            area9 = Area(pygame.image.load("src/Sprites/background_top_bottom.png"))
+            area10 = Area(pygame.image.load("src/Sprites/background_left.png"))
+            area11 = Area(pygame.image.load("src/Sprites/background_right_bottom.png"))
+            area12 = Area(pygame.image.load("src/Sprites/background_top_bottom.png"))
+            area13 = Area(pygame.image.load("src/Sprites/background_left_right.png"))
+            area14 = Area(pygame.image.load("src/Sprites/background_left_bottom.png"))
+            area15 = Area(pygame.image.load("src/Sprites/background_left_bottom.png"))
+            area16 = Area(pygame.image.load("src/Sprites/background_left_right.png"))
+            area17 = Area(pygame.image.load("src/Sprites/background_top_bottom.png"))
+            area18 = Area(pygame.image.load("src/Sprites/background_right_bottom.png"))
+            area19 = Area(pygame.image.load("src/Sprites/background_left_top.png"))
+            area20 = Area(pygame.image.load("src/Sprites/background_top_bottom.png"))
+            area21 = Area(pygame.image.load("src/Sprites/background_left_top_bottom.png"))
+            area22 = Area(pygame.image.load("src/Sprites/background_right_top_bottom.png"))
+            area23 = Area(pygame.image.load("src/Sprites/background_left_right.png"))
+            area24 = Area(pygame.image.load("src/Sprites/background_left_top.png"))
+            area25 = Area(pygame.image.load("src/Sprites/background_left_right.png"))
+            area26 = Area(pygame.image.load("src/Sprites/background_left_right_bottom.png"))
+            area27 = Area(pygame.image.load("src/Sprites/background_right_bottom.png"))
+            area28 = Area(pygame.image.load("src/Sprites/background_right_top.png"))
+            area29 = Area(pygame.image.load("src/Sprites/background_top_bottom.png"))
+            area30 = Area(pygame.image.load("src/Sprites/background_top_bottom.png"))
+            area31 = Area(pygame.image.load("src/Sprites/background_left_right.png"))
+            boss = Area(pygame.image.load("src/Sprites/background_top.png"))
 
             self.start.set_neighbours(None,None,area1,None)
             area1.set_neighbours(area2,area3,None,self.start)
@@ -497,51 +489,46 @@ class StartGame():
 
     def choose_party(self):
 
-        screen_width = pygame.image.load("Sprites/background_full.png").get_width()
-        screen_height = pygame.image.load("Sprites/background_full.png").get_height()
-        wall = pygame.image.load("Sprites/wall_length.png").get_height()
-        
-        walking_left = [pygame.image.load("Sprites/stand_left.png")]
-        walking_right = [pygame.image.load("Sprites/stand_right.png")]
-        walking_top = [pygame.image.load("Sprites/stand_top.png")]
-        walking_down = [pygame.image.load("Sprites/stand_bot.png")]
+        walking_left = [pygame.image.load("src/Sprites/stand_left.png")]
+        walking_right = [pygame.image.load("src/Sprites/stand_right.png")]
+        walking_top = [pygame.image.load("src/Sprites/stand_top.png")]
+        walking_down = [pygame.image.load("src/Sprites/stand_bot.png")]
         
         for i in range(7):
-            walking_left.append(pygame.image.load("Sprites/step_left.png"))
-            walking_right.append(pygame.image.load("Sprites/step_right.png"))
-            walking_top.append(pygame.image.load("Sprites/step_top.png"))
-            walking_down.append(pygame.image.load("Sprites/step_bot.png"))
+            walking_left.append(pygame.image.load("src/Sprites/step_left.png"))
+            walking_right.append(pygame.image.load("src/Sprites/step_right.png"))
+            walking_top.append(pygame.image.load("src/Sprites/step_top.png"))
+            walking_down.append(pygame.image.load("src/Sprites/step_bot.png"))
         for i in range(7):
-            walking_left.append(pygame.image.load("Sprites/stand_left.png"))
-            walking_right.append(pygame.image.load("Sprites/stand_right.png"))
-            walking_top.append(pygame.image.load("Sprites/stand_top.png"))
-            walking_down.append(pygame.image.load("Sprites/stand_bot.png"))
+            walking_left.append(pygame.image.load("src/Sprites/stand_left.png"))
+            walking_right.append(pygame.image.load("src/Sprites/stand_right.png"))
+            walking_top.append(pygame.image.load("src/Sprites/stand_top.png"))
+            walking_down.append(pygame.image.load("src/Sprites/stand_bot.png"))
         for i in range(7):
-            walking_left.append(pygame.image.load("Sprites/step_left2.png"))
-            walking_right.append(pygame.image.load("Sprites/step_right2.png"))
-            walking_top.append(pygame.image.load("Sprites/step_top2.png"))
-            walking_down.append(pygame.image.load("Sprites/step_bot2.png"))
+            walking_left.append(pygame.image.load("src/Sprites/step_left2.png"))
+            walking_right.append(pygame.image.load("src/Sprites/step_right2.png"))
+            walking_top.append(pygame.image.load("src/Sprites/step_top2.png"))
+            walking_down.append(pygame.image.load("src/Sprites/step_bot2.png"))
         for i in range(7):
-            walking_left.append(pygame.image.load("Sprites/stand_left.png"))
-            walking_right.append(pygame.image.load("Sprites/stand_right.png"))
-            walking_top.append(pygame.image.load("Sprites/stand_top.png"))
-            walking_down.append(pygame.image.load("Sprites/stand_bot.png"))
+            walking_left.append(pygame.image.load("src/Sprites/stand_left.png"))
+            walking_right.append(pygame.image.load("src/Sprites/stand_right.png"))
+            walking_top.append(pygame.image.load("src/Sprites/stand_top.png"))
+            walking_down.append(pygame.image.load("src/Sprites/stand_bot.png"))
 
         walking_animation = [walking_left,walking_right,walking_top,walking_down]
 
-
-        main_character = MainCharacter("Leon",walking_animation,pygame.image.load("Sprites/main_character.png"),
+        main_character = MainCharacter("Leon",walking_animation,pygame.image.load("src/Sprites/main_character.png"),
         screen_width/2,screen_height/2)
 
-        Knight = Character("Knight",pygame.image.load("Sprites/knight.png"))
+        Knight = Character("Knight",pygame.image.load("src/Sprites/knight.png"))
         
-        Archer = Character("Archer",pygame.image.load("Sprites/archer.png"))
+        Archer = Character("Archer",pygame.image.load("src/Sprites/archer.png"))
         
-        Wizard = Character("Wizard",pygame.image.load("Sprites/wizard.png"))
+        Wizard = Character("Wizard",pygame.image.load("src/Sprites/wizard.png"))
         
-        Assassin = Character("Assassin",pygame.image.load("Sprites/assassin.png"))
+        Assassin = Character("Assassin",pygame.image.load("src/Sprites/assassin.png"))
 
-        Monk = Character("Monk",pygame.image.load("Sprites/monk.png"))
+        Monk = Character("Monk",pygame.image.load("src/Sprites/monk.png"))
 
         main_character.choose_character(self.party)
         Knight.choose_character(self.party)
@@ -554,17 +541,17 @@ class StartGame():
 
     def pick_monsters(self):
 
-        monster1 = Monster("Demon Assassin",pygame.image.load("Sprites/demon.png"),pygame.image.load("Sprites/demon.png"),[1,0,0],6)
+        monster1 = Monster("Demon Assassin",pygame.image.load("src/Sprites/demon.png"),pygame.image.load("src/Sprites/demon.png"),[1,0,0],6)
 
-        monster2 = Monster("Beholder",pygame.image.load("Sprites/eyeball.png"),pygame.image.load("Sprites/eyeball.png"),[1,0,0],4)
+        monster2 = Monster("Beholder",pygame.image.load("src/Sprites/eyeball.png"),pygame.image.load("src/Sprites/eyeball.png"),[1,0,0],4)
 
-        monster3 = Monster("Goblin Soldier",pygame.image.load("Sprites/goblin.png"),pygame.image.load("Sprites/goblin.png"),[1,0,0],4)
+        monster3 = Monster("Goblin Soldier",pygame.image.load("src/Sprites/goblin.png"),pygame.image.load("src/Sprites/goblin.png"),[1,0,0],4)
 
-        monster4 = Monster("Skeleton Warrior",pygame.image.load("Sprites/skeleton.png"),pygame.image.load("Sprites/skeleton.png"),[1,0,0],3)
+        monster4 = Monster("Skeleton Warrior",pygame.image.load("src/Sprites/skeleton.png"),pygame.image.load("src/Sprites/skeleton.png"),[1,0,0],3)
 
-        monster5 = Monster("Warlock",pygame.image.load("Sprites/warlock.png"),pygame.image.load("Sprites/warlock.png"),[1,0,0],2)
+        monster5 = Monster("Warlock",pygame.image.load("src/Sprites/warlock.png"),pygame.image.load("src/Sprites/warlock.png"),[1,0,0],2)
 
-        monster6 = Monster("Dragonling",pygame.image.load("Sprites/dragonling.png"),pygame.image.load("Sprites/dragonling.png"),[1,0,0],5)
+        monster6 = Monster("Dragonling",pygame.image.load("src/Sprites/dragonling.png"),pygame.image.load("src/Sprites/dragonling.png"),[1,0,0],5)
         
         self.monsters.append(monster1)
         self.monsters.append(monster2)
@@ -709,10 +696,6 @@ def choose_action(setting):
 
 
 def render_battle(party,monster,character,setting):
-    screen_width = pygame.image.load("Sprites/background_full.png").get_width()
-    screen_height = pygame.image.load("Sprites/background_full.png").get_height()
-    window = pygame.display.set_mode((screen_width, screen_height)) 
-    font = pygame.font.SysFont("Arial", 25)
     window.fill((0, 0, 0))
     window.blit(font.render(f"{monster.name}:   {monster.hp}/{monster.hp+monster.taken_dmg}", True, (200, 0, 0)), (20, 0))
     window.blit(font.render(character.name, True, (200,200,200)),(0,screen_height-125))
