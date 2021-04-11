@@ -3,5 +3,8 @@
 /laskarit/viikko2/unicafe/htmlcov
 /game/.coverage
 /game/htmlcov
-
+/game/poetry.lock
+/game/pyproject.toml
+/game/src/__pycache__
+/game/src/tests/__pycache__
 
