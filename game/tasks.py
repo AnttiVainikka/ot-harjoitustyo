@@ -2,7 +2,7 @@ from invoke import task
 
 @task
 def start(ctx):
-    ctx.run("python3 src/game.py")
+    ctx.run("python3 src/main_code.py")
 
 @task
 def test(ctx):
@@ -13,4 +13,7 @@ def coverage_report(ctx):
     ctx.run("coverage run --branch -m pytest src")
     ctx.run("coverage html")
 
+@task
+def lint(ctx):
+    ctx.run("pylint src")
     

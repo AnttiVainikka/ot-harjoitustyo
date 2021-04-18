@@ -74,24 +74,60 @@ def add_character(name :str,attack :list,defense :list,mdef :list,hp :list,mp :l
         counter += 1
 
 def skills():
-    add_skill("Power Strike","Strikes the enemy with great power dealing physical damage",1.5,"physical",4,0,0,"attack",0,0,0,0,0)
-    add_skill("Charge","Charges power to deal over twice the damage next turn",1.5,"support",5,0,1,"attack",0,0,0,0,2)
-    add_skill("Shockwave","Launch a shockwave dealing physical damage to all enemies",1.2,"physical",9,1,0,"attack",0,0,0,0,0)
-    add_skill("Ray of Judgement","Call forth a ray of destruction from the sky dealing almighty damage to all enemies",1.5,"almighty",24,1,0,"attack",0,0,0,0,0)
-    add_skill("Deadly Strike","Deal massive physical damage to an enemy",7.5,"physical",15,0,0,"attack",0,0,0,0,0)
-    add_skill("Piercing Arrow","Shoot a piercing arrow into the enemy ignoring all defenses",1,"almighty",3,0,0,"attack",0,0,0,0,0)
-    add_skill("Fusillade","Call a fusillade on the enemy dealing physical damage to all enemies",1.2,"physical",7,1,0,"attack",0,0,0,0,0)
-    add_skill("Charged Shot","Shoot a charged shot at the enemy dealing massive physical damage",7.5,"physical",15,0,0,"attack",0,0,0,0,0)
-    add_skill("Fireball","Launch an fireball into the enemy dealing magic damage",1.5,"magic",5,0,0,"attack",0,0,0,0,0)
-    add_skill("Explosion","Fire off an explosion dealing magic damage to all enemies",0.8,"magic",8,1,0,"attack",0,0,0,0,0)
-    add_skill("Thunderstrike","Call forth thunder to strike at the enemy dealing high magic damage",3.5,"magic",12,0,0,"attack",0,0,0,0,0)
-    add_skill("Meteor","Call forth a meteor to strike your foes dealing massive magic damage to all enemies",8,"magic",44,1,0,"attack",0,0,0,0,0)
-    add_skill("Shield Bash","Bash the enemy with a shield dealing physical damage based on defense",8,"physical",5,0,0,"defense",0,0,0,0,0)
-    add_skill("Holy Light","Pray for God to cure a party member healing them moderately",2.5,"support",3,0,1,"defense",1,1,0,0,0)
-    add_skill("Raise Defense","Buff the party's defense for 3 turns",0.5,"support",12,1,1,"defense",0,0,0,0,3)
-    add_skill("Resurrect","Pray to God to resurrect a party member bringing them back to the fight",0,"support",18,0,0,"none",0,0,0,1,0)
-    add_skill("Raise Attack","Buff the party's attack for 3 turns",0.5,"support",12,1,1,"attack",0,0,0,0,3)
-    add_skill("Salvation","Pray for God's light to heal the entire party",10,"support",30,1,1,"defense",1,1,0,0,0)
+
+    add_skill("Power Strike","Strikes the enemy with great power dealing physical damage",
+    1.5,"physical",4,0,0,"attack",0,0,0,0,0)
+
+    add_skill("Charge","Charges power to deal over twice the damage next turn",
+    1.5,"support",5,0,1,"attack",0,0,0,0,2)
+
+    add_skill("Shockwave","Launch a shockwave dealing physical damage to all enemies",
+    1.2,"physical",9,1,0,"attack",0,0,0,0,0)
+
+    add_skill("Ray of Judgement","Call forth a ray of destruction from the sky dealing almighty damage to all enemies",
+    1.5,"almighty",24,1,0,"attack",0,0,0,0,0)
+
+    add_skill("Deadly Strike","Deal massive physical damage to an enemy",
+    7.5,"physical",15,0,0,"attack",0,0,0,0,0)
+
+    add_skill("Piercing Arrow","Shoot a piercing arrow into the enemy ignoring all defenses",
+    1,"almighty",3,0,0,"attack",0,0,0,0,0)
+
+    add_skill("Fusillade","Call a fusillade on the enemy dealing physical damage to all enemies",
+    1.2,"physical",7,1,0,"attack",0,0,0,0,0)
+
+    add_skill("Charged Shot","Shoot a charged shot at the enemy dealing massive physical damage",
+    7.5,"physical",15,0,0,"attack",0,0,0,0,0)
+
+    add_skill("Fireball","Launch an fireball into the enemy dealing magic damage",
+    1.5,"magic",5,0,0,"attack",0,0,0,0,0)
+
+    add_skill("Explosion","Fire off an explosion dealing magic damage to all enemies",
+    0.8,"magic",8,1,0,"attack",0,0,0,0,0)
+
+    add_skill("Thunderstrike","Call forth thunder to strike at the enemy dealing high magic damage",
+    3.5,"magic",12,0,0,"attack",0,0,0,0,0)
+
+    add_skill("Meteor","Call forth a meteor to strike your foes dealing massive magic damage to all enemies",
+    8,"magic",44,1,0,"attack",0,0,0,0,0)
+
+    add_skill("Shield Bash","Bash the enemy with a shield dealing physical damage based on defense",
+    8,"physical",5,0,0,"defense",0,0,0,0,0)
+
+    add_skill("Holy Light","Pray for God to cure a party member healing them moderately",
+    2.5,"support",3,0,1,"defense",1,1,0,0,0)
+
+    add_skill("Raise Defense","Buff the party's defense for 3 turns",
+    0.5,"support",12,1,1,"defense",0,0,0,0,3)
+
+    add_skill("Resurrect","Pray to God to resurrect a party member bringing them back to the fight",
+    0,"support",18,0,0,"none",0,0,0,1,0)
+
+    add_skill("Raise Attack","Buff the party's attack for 3 turns",
+    0.5,"support",12,1,1,"attack",0,0,0,0,3)
+
+    add_skill("Salvation","Pray for God's light to heal the entire party",
+    10,"support",30,1,1,"defense",1,1,0,0,0)
 
 
 
