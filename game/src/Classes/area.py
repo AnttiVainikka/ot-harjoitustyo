@@ -5,6 +5,8 @@ from random import randint
 from Classes.character import Character
 from Battle.battle import battle
 from UI.move import move
+from StartGame.render import render_game_over
+from UI.action import choose_action
 screen_width = pygame.image.load("src/Sprites/background_full.png").get_width()
 screen_height = pygame.image.load("src/Sprites/background_full.png").get_height()
 wall = pygame.image.load("src/Sprites/wall_length.png").get_height()
@@ -56,7 +58,9 @@ class Area():
                 window.blit(boss.over_sprite, (boss.x, boss.y))
                 if collision(party[0],boss,countdown):
                     battle(party,boss)
-                    pygame.quit()
+                    render_game_over("victory")
+                    while True:
+                        choose_action("victory")
 
             if party[0].left and party[0].x >= wall and party[0].up is False and party[0].down is False:
                 party[0].x -= 6

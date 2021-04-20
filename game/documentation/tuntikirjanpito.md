@@ -11,4 +11,5 @@ Päivämäärä  |  Aika  |  Mitä tehty
 6.4   |  3h  |   taitojen käyttöönotto taisteluissa ja taisteluiden koodin parantelua
 11.4  |  1h  |   poetry run invoke komentojen käyttöönotto ja testien päivittäminen
 18.4  |  5h  |   koodin jakaminen useampaan tiedostoon ja pylintin arvion nostaminen (3/10 -> 8/10)
-summa |  42h |
+19.4  |  7h  |   loppujen charactereiden tietojen luominen, pelin tekeminen kunnolla pelattavaksi, testien lisäys
+summa |  49h |

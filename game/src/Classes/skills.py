@@ -24,7 +24,7 @@ class Skill():
         self.user = ""
     
     def activate(self,character,target):
-        if self.type != "support":
+        if self.type == "physical" or self.type == "magic" or self.type == "almighty":
             character.attack(target,self)
         if self.buff == 1:
             if self.stat == "attack":
@@ -33,6 +33,30 @@ class Skill():
             if self.stat == "defense":
                 original_defense = db.execute("SELECT defense FROM StatValues WHERE level = ? AND character = ?",[target.level[0],target.name]).fetchone()[0]
                 target.df += original_defense * self.multiplier
+        if self.type == "poison":
+            target.status = "Poison"
+        if self.recover == 1:
+            if self.hp == 1:
+                if self.stat == "attack":
+                    amount = character.atk * self.multiplier
+                if self.stat == "defense":
+                    amount = character.df * self.multiplier
+                target.recover(int(amount),"hp")
+            if self.mp == 1:
+                if self.stat == "attack":
+                    amount = character.atk * self.multiplier
+                if self.stat == "defense":
+                    amount = character.df * self.multiplier
+                if self.stat == "mdef":
+                    amount = character.mdef * self.multiplier
+                if self.stat == "hp":
+                    amount = character.hp * self.multiplier
+                if self.stat == "mp":
+                    amount = character.mp * self.multiplier
+                target.recover(int(amount),"mp")
+        if self.resurrect == 1:
+            target.alive = True
+            target.recover(target.taken_dmg,"hp")
     
     def deactivate(self,party,monster):
         for character in party:

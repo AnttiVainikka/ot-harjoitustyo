@@ -15,13 +15,17 @@ Kartta, jossa pelaaja voi liikuttaa hahmoaan eri kenttien välillä, joissa liik
 ## Jatkokehitysideoita
 
 -  Useampi päähenkilö, joista valita
--  Paljon eri sivuhenkilöitä, joita valita päähenkilön joukkueeseen
+-  Paljon eri sivuhenkilöitä, joita valita päähenkilön joukkueeseen (tehty)
 -  Enemmän monipuolisuutta vihollisiin.
 -  Uusien spritejen luominen, entisten parantelu
 -  Useampien karttojen luominen uudelleenpelattavuuden parantamiseksi.
--  Boss-vihollisten luominen, joiden päihittäminen johtaa pelin voittamiseen
+-  Boss-vihollisten luominen, joiden päihittäminen johtaa pelin voittamiseen (tehty)
 -  Mahdollisuus tallentaa peli, jolloin tiedot tallentuvat tiedostoon.
 -  Musiikin käyttöönotto peliin.
--  Erinäisten taitojen/taikojen käyttöönotto sekä pelattaville hahmoille että vihollisille.
+-  Erinäisten taitojen/taikojen käyttöönotto sekä pelattaville hahmoille että vihollisille. (tehty)
+-  Erinäisten itemien käyttöönotto, joita voi käyttää parantamaan hahmoja
 -  Animaatioiden luominen taisteluja varten.
+-  Taisteluiden vaikeuden ja syvyyden parantaminen
+-  Eri hahmojen voimatasojen tasapainottaminen
+-  Grafiikoiden parantaminen
 -  Tarinan luominen pelille sekä kaikille hahmoille.

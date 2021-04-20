@@ -1,6 +1,8 @@
 from random import randint
 from Classes.character import Character
 from UI.action import choose_action
+from StartGame.render import render_battle
+from StartGame.render import render_game_over
 import pygame
 # pylint: disable=no-member
 pygame.init()
@@ -11,40 +13,6 @@ door_wide = pygame.image.load("src/Sprites/wide_length_door.png").get_width()
 door_tall = pygame.image.load("src/Sprites/tall_length_door.png").get_height()
 window = pygame.display.set_mode((screen_width, screen_height)) 
 font = pygame.font.SysFont("Arial", 25)
-
-def render_battle(party,monster,character,setting):
-    window.fill((0, 0, 0))
-    window.blit(font.render(f"{monster.name}:   {monster.hp}/{monster.hp+monster.taken_dmg}", True, (200, 0, 0)), (20, 0))
-    window.blit(font.render(character.name, True, (200,200,200)),(0,screen_height-125))
-    window.blit(monster.sprite,(screen_width-monster.sprite.get_width()-10,450))
-
-    for i in range(0,4):
-            window.blit(party[i].sprite,(i*10+10,300+i*100))
-
-    if setting == "battle":
-        window.blit(font.render("1. Attack", True, (200,200,200)),(0,screen_height-100))
-        window.blit(font.render("2. Skill", True, (200,200,200)),(0,screen_height-75))
-        window.blit(font.render("3. Item", True, (200,200,200)),(0,screen_height-50))
-        window.blit(font.render("4. Run", True, (200,200,200)),(0,screen_height-25))
-
-        for i in range(0,4):
-            window.blit(font.render(party[i].name, True, (0,200,0)),(250,screen_height-100+i*25))
-            window.blit(font.render(f"HP  {party[i].hp}/{party[i].hp+party[i].taken_dmg}", True, (0,200,0)),(450,screen_height-100+i*25))
-            window.blit(font.render(f"MP  {party[i].mp}/{party[i].mp+party[i].used_mp}", True, (0,200,0)),(700,screen_height-100+i*25))
-            window.blit(font.render(f"LVL  {party[i].level[0]}/10", True, (0,200,0)),(900,screen_height-100+i*25))
-            #window.blit(font.render(f"ATK  {party[i].atk}", True, (0,200,0)),(900,screen_height-100+i*25))
-
-    if setting == "choose_skill":
-        counter = 0
-        for skill in character.skills:
-            if counter < 4:
-                window.blit(font.render(f"{counter+1}. {skill.name}  ({skill.cost} MP)", True, (200,200,200)),(0,screen_height-100+counter*25))
-            else:
-                window.blit(font.render(f"{counter+1}. {skill.name}  ({skill.cost} MP)", True, (200,200,200)),(300,screen_height-200+counter*25))
-            counter += 1
-    
-
-    pygame.display.flip()
 
 
 def battle(party,monster):
@@ -58,6 +26,7 @@ def battle(party,monster):
         for character in party:
             if character.alive:
                 while True:
+                    move_on = True
                     render_battle(party,monster,character,"battle")
 
                     while True:
@@ -81,9 +50,36 @@ def battle(party,monster):
                                 character.mp -= skill.cost
                                 character.used_mp += skill.cost
                                 if skill.aoe == 0:
-                                    if skill.buff == 0:
+                                    if skill.buff == 0 and skill.recover == 0 and skill.resurrect == 0:
                                         #target = choose_action("battle")
+                                        #render_battle(party,monster,character,"battle")
                                         skill.activate(character,monster)
+                                    elif skill.recover == 1:
+                                        render_battle(party,monster,character,"choose_target_ally")
+                                        while True:
+                                            target = choose_action("choose target")
+                                            try:
+                                                if target == 0 or party[target-1].alive is True:
+                                                    break
+                                            except IndexError:
+                                                pass
+                                        if target == 0:
+                                            move_on = False
+                                        else:
+                                            skill.activate(character,party[target-1])  
+                                    elif skill.resurrect == 1:
+                                        render_battle(party,monster,character,"choose_target_ally")
+                                        while True:
+                                            target = choose_action("choose target")
+                                            try:
+                                                if target == 0 or party[target-1].alive is False:
+                                                    break
+                                            except IndexError:
+                                                pass
+                                        if target == 0:
+                                            move_on = False
+                                        else:
+                                            skill.activate(character,party[target-1])                                        
                                     else:
                                         if skill in active_skills:
                                             skill.deactivate(party,monster)
@@ -92,8 +88,11 @@ def battle(party,monster):
                                         skill.user = character.name
                                         active_skills.append(skill)
                                 else:
-                                    if skill.buff == 0:
+                                    if skill.buff == 0 and skill.recover == 0:
                                         skill.activate(character,monster)
+                                    elif skill.recover == 1:
+                                        for party_member in party:
+                                            skill.activate(character,party_member)
                                     else:
                                         if skill in active_skills:
                                             skill.deactivate(party,monster)
@@ -101,12 +100,23 @@ def battle(party,monster):
                                         for party_member in party:
                                             skill.activate(character,party_member)
                                         active_skills.append(skill)
-                                break
+                                if move_on is True:
+                                    break
 
-            if monster.alive == False:
+            if monster.alive is False:
                 for skill in active_skills:
                     skill.deactivate(party,monster)
                 return
+
+        alive_characters = 4
+        for character in party:
+            if character.alive is False:
+                alive_characters -= 1
+        if alive_characters == 0:
+            render_game_over("defeat")
+            while True:
+                choose_action("defeat")
+
         while True:
             target = randint(0,3)
             if party[target].alive:

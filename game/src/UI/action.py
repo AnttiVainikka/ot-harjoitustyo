@@ -30,7 +30,7 @@ def choose_action(setting):
             if event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_8:
                     return 8
-            if setting == "choose skill":
+            if setting == "choose skill" or setting == "choose target":
                 if event.type == pygame.KEYDOWN:
                     if event.key == pygame.K_r:
                         return 0

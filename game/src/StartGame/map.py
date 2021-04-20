@@ -11,6 +11,7 @@ def generate_map(pick):
 
     if pick == 1:
         boss = Character("Necromancer",pygame.image.load("src/Sprites/necromancer2.png"),pygame.image.load("src/Sprites/necromancer1.png"))
+        boss.give_exp(9001)
         boss.x = screen_width / 2 - boss.over_sprite.get_width() / 2
         boss.y = screen_height - wall - boss.over_sprite.get_height()
         start = Area(pygame.image.load("src/Sprites/background_top.png"))

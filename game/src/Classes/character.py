@@ -30,6 +30,7 @@ class Character():
         self.alive = True
         self.taken_dmg = 0
         self.used_mp = 0
+        self.status = None
 
         self.over_sprite = over_sprite
         self.x = screen_width / 2
@@ -112,7 +113,21 @@ class Character():
         else:
             self.hp -= damage
             self.taken_dmg += damage
-    
+
+
+    def recover(self,amount,stat):
+        if stat == "hp":
+            if amount > self.taken_dmg:
+                amount = self.taken_dmg
+            self.hp += amount
+            self.taken_dmg -= amount
+
+        if stat == "mp":
+            if amount > self.used_mp:
+                amount = self.used_mp
+            self.mp += amount
+            self.used_mp -= amount
+
 
     def reset_health(self):
         self.hp += self.taken_dmg
@@ -123,14 +138,16 @@ class Character():
 
     def attack(self,target,skill):
         if skill == 0:
-            damage = self.atk-target.df//3
+            damage = self.atk - target.df/3
         else:
             if skill.type == "physical":
-                damage = self.atk * skill.multiplier - target.df//3
+                damage = self.atk * skill.multiplier - target.df/3
             if skill.type == "magic":
-                damage = self.atk * skill.multiplier - target.mdef//3  
+                damage = self.atk * skill.multiplier - target.mdef/3  
             if skill.type == "almighty":
                 damage = self.atk * skill.multiplier 
+            if skill.hp == 1 and skill.recover == 0:
+                self.take_dmg(int(damage/3))
         if damage <= 0:
             damage = 1
         target.take_dmg(int(damage))
