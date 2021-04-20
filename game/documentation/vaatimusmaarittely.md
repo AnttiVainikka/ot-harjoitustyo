@@ -10,7 +10,7 @@ Pelillä tulee olemaan graafinen käyttöliittymä, jota voidaan ohjata ainakin 
 
 ## Perusversion tarjoama toiminnallisuus
 
-Kartta, jossa pelaaja voi liikuttaa hahmoaan eri kenttien välillä, joissa liikkuu vihollisia, joihin törmääminen aloittaa vuoropohjaisen taistelun vihollisen ja pelaajan valitseman joukkueen kanssa.
+Kartta, jossa pelaaja voi liikuttaa hahmoaan eri kenttien välillä, joissa liikkuu vihollisia, joihin törmääminen aloittaa vuoropohjaisen taistelun vihollisen ja pelaajan valitseman joukkueen kanssa. (tehty)
 
 ## Jatkokehitysideoita
 
