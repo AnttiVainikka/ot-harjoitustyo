@@ -63,6 +63,9 @@ def render_battle(party,monster,character,setting):
             #window.blit(font.render(f"ATK  {party[i].atk}",
             #True, (0,200,0)),(900,screen_height-100+i*25))
 
+            #window.blit(font.render(f"DEF  {party[i].mdef}",
+            #True, (0,200,0)),(900,screen_height-400+i*25))
+
     if setting == "choose_skill":
         counter = 0
         for skill in character.skills:

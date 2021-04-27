@@ -33,6 +33,9 @@ class Skill():
             if self.stat == "defense":
                 original_defense = db.execute("SELECT defense FROM StatValues WHERE level = ? AND character = ?",[target.level[0],target.name]).fetchone()[0]
                 target.df += original_defense * self.multiplier
+            if self.stat == "mdef":
+                original_mdef = db.execute("SELECT mdef FROM StatValues WHERE level = ? AND character = ?",[target.level[0],target.name]).fetchone()[0]
+                target.mdef += original_mdef * self.multiplier
         if self.type == "poison":
             if not target.boss:
                 target.status = ["Poison",3]
@@ -61,19 +64,25 @@ class Skill():
     
     def deactivate(self,party,monster):
         for character in party:
-            if self.aoe == 0:
+            if self.aoe != 1:
                 if character.name == self.user:
                     if self.stat == "attack":
                         original_attack = db.execute("SELECT attack FROM StatValues WHERE level = ? AND character = ?",[character.level[0],character.name]).fetchone()[0]
                         character.atk -=  original_attack * self.multiplier
                     if self.stat == "defense":
                         original_defense = db.execute("SELECT defense FROM StatValues WHERE level = ? AND character = ?",[character.level[0],character.name]).fetchone()[0]
-                        character.df -=  original_defense * self.multiplier      
+                        character.df -=  original_defense * self.multiplier
+                    if self.stat == "mdef":
+                        original_mdef = db.execute("SELECT mdef FROM StatValues WHERE level = ? AND character = ?",[character.level[0],character.name]).fetchone()[0]
+                        character.mdef -=  original_mdef * self.multiplier
             else:
                 if self.stat == "attack":
                     original_attack = db.execute("SELECT attack FROM StatValues WHERE level = ? AND character = ?",[character.level[0],character.name]).fetchone()[0]
                     character.atk -=  original_attack * self.multiplier
                 if self.stat == "defense":
                     original_defense = db.execute("SELECT defense FROM StatValues WHERE level = ? AND character = ?",[character.level[0],character.name]).fetchone()[0]
-                    character.df -=  original_defense * self.multiplier  
+                    character.df -=  original_defense * self.multiplier
+                if self.stat == "mdef":
+                    original_mdef = db.execute("SELECT mdef FROM StatValues WHERE level = ? AND character = ?",[character.level[0],character.name]).fetchone()[0]
+                    character.mdef -=  original_mdef * self.multiplier
         self.duration = db.execute("SELECT duration FROM Skills WHERE name = ?",[self.name]).fetchone()[0]

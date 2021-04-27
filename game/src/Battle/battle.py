@@ -147,9 +147,9 @@ def use_skill(party,monster,character,active_skills):
             if skill in active_skills:
                 skill.deactivate(party,monster)
                 active_skills.remove(skill)
-                for party_member in party:
-                    skill.activate(character,party_member)
-                active_skills.append(skill)
+            for party_member in party:
+                skill.activate(character,party_member)
+            active_skills.append(skill)
     return True
 
 def use_item(party,monster,user):
