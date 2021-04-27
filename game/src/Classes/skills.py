@@ -34,7 +34,8 @@ class Skill():
                 original_defense = db.execute("SELECT defense FROM StatValues WHERE level = ? AND character = ?",[target.level[0],target.name]).fetchone()[0]
                 target.df += original_defense * self.multiplier
         if self.type == "poison":
-            target.status = "Poison"
+            if not target.boss:
+                target.status = ["Poison",3]
         if self.recover == 1:
             if self.hp == 1:
                 if self.stat == "attack":

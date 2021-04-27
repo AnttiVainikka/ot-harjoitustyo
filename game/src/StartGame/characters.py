@@ -1,5 +1,6 @@
 import pygame
 from Classes.character import Character
+from Classes.items import Item
 from UI.action import choose_action
 from StartGame.render import render_character_screen
 
@@ -35,6 +36,7 @@ def choose_party(party :list):
     sprite = pygame.image.load("src/Sprites/main_character.png")
 
     main_character = Character("Leon", sprite, walking_animation)
+    give_items(main_character)
 
     sprite = pygame.image.load("src/Sprites/knight.png")
     knight = Character("Knight", sprite, sprite)
@@ -105,3 +107,14 @@ def generate_monsters(monsters :list):
     monsters.append(monster6)
     for character in monsters:
         character.give_exp(9001)
+
+def give_items(character):
+    character.items.append(Item("Potion",9))
+    character.items.append(Item("High Potion",6))
+    character.items.append(Item("X Potion",3))
+    character.items.append(Item("Ether",6))
+    character.items.append(Item("High Ether",4))
+    character.items.append(Item("X Ether",2))
+    character.items.append(Item("Mega Potion",3))
+    character.items.append(Item("Full Heal",1))
+    character.items.append(Item("Balm of Life",3))

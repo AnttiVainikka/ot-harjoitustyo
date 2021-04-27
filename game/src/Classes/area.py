@@ -106,19 +106,19 @@ class Area():
                 countdown = 0
 
             if party[0].right and party[0].x + 6 > screen_width-character_width-wall and door_tall < party[0].y < screen_height - door_tall:
-                if self.right != None:
+                if self.right is not None:
                     party[0].x = wall
                     self.right.activate(party,monsters,boss)
             if party[0].left and party[0].x - 6 < wall and door_tall < party[0].y < screen_height - door_tall:
-                if self.left != None:
+                if self.left is not None:
                     party[0].x = screen_width-wall-character_width
                     self.left.activate(party,monsters,boss)
             if party[0].up and party[0].y - 6 < wall and door_wide < party[0].x < screen_width - door_wide:
-                if self.top != None:
+                if self.top is not None:
                     party[0].y = screen_height-wall-character_height
                     self.top.activate(party,monsters,boss)
             if party[0].down and party[0].y + 6 > screen_height-character_height-wall and door_wide < party[0].x < screen_width - door_wide:
-                if self.bottom != None:
+                if self.bottom is not None:
                     party[0].y = wall
                     self.bottom.activate(party,monsters,boss)
 
@@ -137,9 +137,9 @@ class Area():
                     window.blit(monster.over_sprite, (monster.x, monster.y))
 
                     if collision(party[0],monster,countdown):
-                        battle(party,monster)
-                        for character in party:
-                            character.give_exp(monster.level[0]*50)
+                        if battle(party,monster):
+                            for character in party:
+                                character.give_exp(monster.level[0]*50)
                         monster.reset_health()
                         monster.alive = True
                         area_monsters.remove(monster)

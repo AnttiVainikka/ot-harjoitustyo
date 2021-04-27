@@ -15,12 +15,15 @@ db.execute("CREATE TABLE LearnSets (character TEXT REFERENCES Characters (name),
 db.execute("DROP TABLE Skills")
 db.execute("CREATE TABLE Skills (name TEXT, desc TEXT, multiplier FLOAT, type TEXT, cost INT, aoe INT, buff INT, stat TEXT, recover INT, hp INT, mp INT, resurrect INT, duration INT)")
 
+db.execute("DROP TABLE Items")
+db.execute("CREATE TABLE Items (name TEXT, desc TEXT, multiplier FLOAT, aoe INT, hp INT, mp INT, resurrect INT)")
 
 
 
 def activate():
     characters()
     skills()
+    items()
 
 def characters():
 
@@ -169,7 +172,7 @@ def skills():
     1.25,"physical",4,0,0,"attack",0,0,0,0,0)
 
     add_skill("Charge","Charges power to deal over twice the damage next turn",
-    1.5,"self",5,0,1,"attack",0,0,0,0,2)
+    1.5,"self",5,-1,1,"attack",0,0,0,0,2)
 
     add_skill("Shockwave","Launch a shockwave dealing physical damage to all enemies",
     1.2,"physical",9,1,0,"attack",0,0,0,0,0)
@@ -229,7 +232,7 @@ def skills():
     0.5,"support",5,0,0,"mp",1,0,1,0,0)
 
     add_skill("Meditate","Meditate to recover your mp",
-    0.5,"self",0,0,0,"mp",1,0,1,0,0)
+    0.5,"self",0,-1,0,"mp",1,0,1,0,0)
 
     add_skill("Raise Magic Defense","Buff the party's magic defense for 3 turns",
     0.5,"support",12,1,1,"mdef",0,0,0,0,3)
@@ -240,7 +243,7 @@ def skills():
     add_skill("Blade Slash","Slash the enemy with a blade dealing physical damage",
     1.6,"physical",6,0,0,"attack",0,0,0,0,0)
 
-    add_skill("Poison","Poison the enemy for 3 turns dealing damage over time",
+    add_skill("Poison","Poison the enemy for 3 turns dealing damage over time. Does not work on bosses",
     5.5,"poison",4,0,0,"attack",0,0,0,0,3)
 
     add_skill("Backstab","Backstab the enemy dealing damage while ignoring their defense",
@@ -253,5 +256,19 @@ def skills():
 def add_skill(name :str,description :str,multiplier :float,damage_type :str,cost :int, aoe :int, buff :int, stat :str, recover :int, hp :int, mp :int, resurrect :int, duration :int):
     db.execute("INSERT INTO Skills (name, desc, multiplier, type, cost, aoe, buff, stat, recover, hp, mp, resurrect, duration) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",[name,description,multiplier,damage_type,cost,aoe,buff,stat,recover,hp,mp,resurrect,duration])
 
+
+def items():
+    add_item("Potion", "Heals a party member by a small amount", 0.25, 0, 1, 0, 0)
+    add_item("High Potion", "Heals a party member by a moderate amount", 0.5, 0, 1, 0, 0)
+    add_item("X Potion", "Heals a party member to full", 1, 0, 1, 0, 0)
+    add_item("Ether", "Restores a party member's mp by a small amount", 0.25, 0, 0, 1, 0)
+    add_item("High Ether", "Restores a party member's mp by a moderate amount", 0.5, 0, 0, 1, 0)
+    add_item("X Ether", "Restores a party member's mp to full", 1, 0, 0, 1, 0)
+    add_item("Mega Potion", "Restores the party's hp by a moderate amount", 0.5, 1, 1, 0, 0)
+    add_item("Full Heal", "Restores the party's hp and mp to full", 1, 1, 1, 1, 0)
+    add_item("Balm of Life", "Resurrects a party member", 0, 0, 0, 0, 1)
+
+def add_item(name :str, description :str, multiplier :float, aoe :int, hp :int, mp :int, resurrect :int):
+    db.execute("INSERT INTO Items (name, desc, multiplier, aoe, hp, mp, resurrect) VALUES (?, ?, ?, ?, ?, ?, ?)",[name,description,multiplier,aoe,hp,mp,resurrect])
 
 activate()

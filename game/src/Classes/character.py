@@ -30,7 +30,9 @@ class Character():
         self.alive = True
         self.taken_dmg = 0
         self.used_mp = 0
-        self.status = None
+        self.status = ["none",0]
+        self.items = []
+
 
         self.over_sprite = over_sprite
         self.x = screen_width / 2
@@ -46,7 +48,7 @@ class Character():
         self.up = False
         self.down = False
         self.direction = 2
-
+        self.boss = False
 
     def move_right(self):
         self.right = True
@@ -134,6 +136,7 @@ class Character():
         self.mp += self.used_mp
         self.taken_dmg = 0
         self.used_mp = 0
+        self.status = ["none",0]
 
 
     def attack(self,target,skill):

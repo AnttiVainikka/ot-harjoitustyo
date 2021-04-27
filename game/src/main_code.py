@@ -19,8 +19,8 @@ class StartGame():
 
         self.start.activate(self.party, self.monsters, self.boss)
 
-
-StartGame()
+if __name__ == "__main__":
+    StartGame()
 
 # monster design credits: Stephen "Redshrike" Challener, hosted by OpenGameArt.org
 # main character overhead sprite credits: ArMM1998, hosted by OpenGameArt.org

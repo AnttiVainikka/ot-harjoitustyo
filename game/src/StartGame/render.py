@@ -36,7 +36,7 @@ def render_battle(party,monster,character,setting):
     window.fill((0, 0, 0))
     window.blit(font.render(f"{monster.name}:   {monster.hp}/{monster.hp+monster.taken_dmg}", True, (200, 0, 0)), (20, 0))
     window.blit(font.render(character.name, True, (200,200,200)),(0,screen_height-125))
-    window.blit(monster.sprite,(screen_width-monster.sprite.get_width()-10,450))
+    window.blit(monster.sprite,(screen_width-monster.sprite.get_width()-10,screen_height/2-monster.sprite.get_height()/2+50))
 
     for i in range(0,4):
             window.blit(party[i].sprite,(i*10+10,300+i*100))
@@ -74,11 +74,47 @@ def render_battle(party,monster,character,setting):
                 True, (200,200,200)),(300,screen_height-200+counter*25))
             counter += 1
         window.blit(font.render("R to return", True, (200,200,200)),(150,screen_height-125))
+        window.blit(font.render("D to see skill descriptions", True, (200,200,200)),(400,screen_height-125))
+
+    if setting == "choose_item":
+        counter = 0
+        for item in party[0].items:
+            if counter < 4:
+                window.blit(font.render(f"{counter+1}. {item.name}  ({item.amount})",
+                True, (200,200,200)),(0,screen_height-100+counter*25))
+            elif counter < 8:
+                window.blit(font.render(f"{counter+1}. {item.name}  ({item.amount})",
+                True, (200,200,200)),(300,screen_height-200+counter*25))
+            else:
+                window.blit(font.render(f"{counter+1}. {item.name}  ({item.amount})",
+                True, (200,200,200)),(600,screen_height-300+counter*25))
+            counter += 1
+        window.blit(font.render("R to return", True, (200,200,200)),(150,screen_height-125))
+        window.blit(font.render("D to see item descriptions", True, (200,200,200)),(400,screen_height-125))
 
     if setting == "choose_target_ally":
         for i in range(0,4):
             window.blit(font.render(f"{i+1}.",
             True, (200,200,200)),(i*10+30+party[i].sprite.get_width(),300+i*100))
         window.blit(font.render("R to return", True, (200,200,200)),(150,screen_height-125))
+
+    pygame.display.flip()
+
+
+def render_info(skills):
+    window.fill((0, 0, 0))
+    counter = 0
+    for skill in skills:
+        if font.size(f"{skill.name}:  {skill.desc}")[0] > screen_width:
+            window.blit(font.render(f"{skill.name}:  {skill.desc[:len(skill.desc)//2]}",
+            True, (200,0,0)),(5,5+counter*50))
+            window.blit(font.render(skill.desc[len(skill.desc)//2:],
+            True, (200,0,0)),(5,35+counter*50))
+            counter += 1
+        else:
+            window.blit(font.render(f"{skill.name}:  {skill.desc}",
+            True, (200,0,0)),(5,5+counter*50))
+        counter += 1
+    window.blit(font.render("R to return", True, (200,200,200)),(150,screen_height-125))
 
     pygame.display.flip()
