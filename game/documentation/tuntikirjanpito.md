@@ -13,4 +13,5 @@ Päivämäärä  |  Aika  |  Mitä tehty
 18.4  |  5h  |   koodin jakaminen useampaan tiedostoon ja pylintin arvion nostaminen (3/10 -> 8/10)
 19.4  |  7h  |   loppujen charactereiden tietojen luominen, pelin tekeminen kunnolla pelattavaksi, testien lisäys
 27.4  |  8h  |   itemeiden luominen ja käyttöönotto, karkaamisen mahdollistaminen, battle-koodin parantelu
-summa |  57h |
+4.5   | 12h  |   useamman monsterin taistelussa mahdollistaminen, monsterit pystyvät nyt käyttämään taitoja, testien lisäys
+summa | 69h  |
