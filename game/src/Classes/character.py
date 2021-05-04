@@ -4,18 +4,11 @@ import pygame
 pygame.init()
 from Classes.skills import Skill
 
-
 db = sqlite3.connect("src/Databases/characters.db")
 db.isolation_level = None
 
-screen_width = pygame.image.load("src/Sprites/background_full.png").get_width()
-screen_height = pygame.image.load("src/Sprites/background_full.png").get_height()
-wall = pygame.image.load("src/Sprites/wall_length.png").get_height()
-door_wide = pygame.image.load("src/Sprites/wide_length_door.png").get_width()
-door_tall = pygame.image.load("src/Sprites/tall_length_door.png").get_height()
-
 class Character():
-
+    """The class for characters, monsters, and bosses. Searches their info from a database based on their name."""
     def __init__(self, name :str, sprite, over_sprite):
 
         self.name = name
@@ -33,22 +26,16 @@ class Character():
         self.status = ["none",0]
         self.items = []
 
-
         self.over_sprite = over_sprite
-        self.x = screen_width / 2
-        self.y = screen_height / 2
-        self.right = False
-        self.left = False
-        self.up = False
-        self.down = False
-        self.speed_x = 1
-        self.speed_y = 1
         self.right = False
         self.left = False
         self.up = False
         self.down = False
         self.direction = 2
         self.boss = False
+        self.x = 520
+        self.y = 600
+        self.monster = False
 
     def move_right(self):
         self.right = True
@@ -72,6 +59,7 @@ class Character():
 
 
     def give_exp(self,exp :int):
+        """Gives the character exp and levels them up if they gain enough."""
         if self.level[0] < 10:
             self.level[1] += exp
             while True:
@@ -89,8 +77,8 @@ class Character():
 
 
     def level_up(self,level):
-        self.taken_dmg = 0
-        self.used_mp = 0
+        """Gives the character the stat values corresponding with their level."""
+        self.reset_health()
         self.atk = db.execute("SELECT attack FROM StatValues WHERE level = ? AND character = ?",
         [level,self.name]).fetchone()[0]
         self.df = db.execute("SELECT defense FROM StatValues WHERE level = ? AND character = ?",
@@ -103,11 +91,12 @@ class Character():
         [level,self.name]).fetchone()[0]
         skill = db.execute("SELECT skill FROM LearnSets WHERE level = ? AND character = ?",
         [level,self.name]).fetchone()
-        if skill != None:
+        if skill != None and skill not in self.skills:
             self.skills.append(Skill(skill[0]))
         
 
     def take_dmg(self,damage):
+        """Makes the character take damage and kills them if the damage is fatal."""
         if damage >= self.hp:
             self.taken_dmg += self.hp
             self.hp = 0
@@ -118,20 +107,24 @@ class Character():
 
 
     def recover(self,amount,stat):
-        if stat == "hp":
-            if amount > self.taken_dmg:
-                amount = self.taken_dmg
-            self.hp += amount
-            self.taken_dmg -= amount
+        """Recovers a set amount of the selected value."""
+        if self.alive:
+            if stat == "hp":
+                if amount > self.taken_dmg:
+                    amount = self.taken_dmg
+                self.hp += amount
+                self.taken_dmg -= amount
 
-        if stat == "mp":
-            if amount > self.used_mp:
-                amount = self.used_mp
-            self.mp += amount
-            self.used_mp -= amount
+            if stat == "mp":
+                if amount > self.used_mp:
+                    amount = self.used_mp
+                self.mp += amount
+                self.used_mp -= amount
 
 
     def reset_health(self):
+        """Resets the characters health and mana"""
+        self.alive = True
         self.hp += self.taken_dmg
         self.mp += self.used_mp
         self.taken_dmg = 0
@@ -140,6 +133,7 @@ class Character():
 
 
     def attack(self,target,skill):
+        """Makes the character attack the target."""
         if skill == 0:
             damage = self.atk - target.df/3
         else:
@@ -157,16 +151,10 @@ class Character():
 
 
     def choose_character(self,party):
+        """Adds the character to the party and sets them at level 1"""
         party.append(self)
         self.level_up(1)
-        self.x
 
-
-    def change_speed(self,cordinate):
-        if cordinate == "x":
-            self.speed_x = -self.speed_x
-        if cordinate == "y":
-            self.speed_y = -self.speed_y
 
 
 

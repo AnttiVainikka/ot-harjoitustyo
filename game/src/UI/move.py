@@ -3,8 +3,8 @@ import pygame
 pygame.init()
 from Classes.character import Character
 
-def move(character,monsters :list):
-    
+def move(character):
+    """Registers if the player presses or releases the arrow keys and configures the main character based on it."""
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
                 exit()
@@ -25,4 +25,4 @@ def move(character,monsters :list):
             if event.key == pygame.K_UP:
                 character.stop_up()
             if event.key == pygame.K_DOWN:
-                character.stop_down()  
+                character.stop_down()

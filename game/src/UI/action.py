@@ -2,6 +2,7 @@
 import pygame
 pygame.init()
 def choose_action(setting):
+    """Let's the player press a button to choose their action. The setting determines which actions are allowed."""
     while True:
         for event in pygame.event.get():
             if event.type == pygame.QUIT:

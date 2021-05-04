@@ -6,7 +6,7 @@ db = sqlite3.connect("src/Databases/characters.db")
 db.isolation_level = None
 
 class Skill():
-
+    """The class for skills. Searches the skills info from a database based on the skills name."""
     def __init__(self,name):
         self.name = name
         self.desc = db.execute("SELECT desc FROM Skills WHERE name = ?",[name]).fetchone()[0]
@@ -24,6 +24,7 @@ class Skill():
         self.user = ""
     
     def activate(self,character,target):
+        """Activates the skill"""
         if self.type == "physical" or self.type == "magic" or self.type == "almighty":
             character.attack(target,self)
         if self.buff == 1:
@@ -40,29 +41,26 @@ class Skill():
             if not target.boss:
                 target.status = ["Poison",3]
         if self.recover == 1:
+            if self.stat == "attack":
+                amount = character.atk * self.multiplier
+            if self.stat == "defense":
+                amount = character.df * self.multiplier
+            if self.stat == "mdef":
+                amount = character.mdef * self.multiplier
+            if self.stat == "hp":
+                amount = character.hp * self.multiplier
+            if self.stat == "mp":
+                amount = character.mp * self.multiplier
             if self.hp == 1:
-                if self.stat == "attack":
-                    amount = character.atk * self.multiplier
-                if self.stat == "defense":
-                    amount = character.df * self.multiplier
                 target.recover(int(amount),"hp")
             if self.mp == 1:
-                if self.stat == "attack":
-                    amount = character.atk * self.multiplier
-                if self.stat == "defense":
-                    amount = character.df * self.multiplier
-                if self.stat == "mdef":
-                    amount = character.mdef * self.multiplier
-                if self.stat == "hp":
-                    amount = character.hp * self.multiplier
-                if self.stat == "mp":
-                    amount = character.mp * self.multiplier
                 target.recover(int(amount),"mp")
         if self.resurrect == 1:
             target.alive = True
             target.recover(target.taken_dmg,"hp")
     
     def deactivate(self,party,monster):
+        """Deactivates the skill"""
         for character in party:
             if self.aoe != 1:
                 if character.name == self.user:

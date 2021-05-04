@@ -5,7 +5,7 @@ db = sqlite3.connect("src/Databases/characters.db")
 db.isolation_level = None
 
 class Item():
-
+    """The class for items. Searches its info from a database based on its name."""
     def __init__(self,name,amount):
         self.name = name
         self.desc = db.execute("SELECT desc FROM Items WHERE name = ?",[name]).fetchone()[0]
@@ -17,6 +17,7 @@ class Item():
         self.amount = amount
 
     def use(self,target):
+        """Uses the item on the given target. Return True if it succeeds and False if something is wrong."""
         if self.resurrect == 1:
             if target.alive is True:
                 return False

@@ -5,7 +5,8 @@ from random import randint
 from Classes.character import Character
 from Battle.battle import battle
 from UI.move import move
-from StartGame.render import render_game_over
+from UI.render import render_game_over
+from UI.render import render_area
 from UI.action import choose_action
 screen_width = pygame.image.load("src/Sprites/background_full.png").get_width()
 screen_height = pygame.image.load("src/Sprites/background_full.png").get_height()
@@ -16,48 +17,52 @@ window = pygame.display.set_mode((screen_width, screen_height))
 clock = pygame.time.Clock()
 
 class Area():
+    """The class for the areas the map consists of."""
     def __init__(self,background):
         self.left = None
         self.right = None
         self.bottom = None
         self.top = None
         self.background = background
-        self.monsters = randint(0,6)
         self.start = False
         self.boss = False
     
     def set_start_location(self):
+        """Sets the area as the start location where the player spawns."""
         self.start = True
     
     def set_boss_room(self):
+        """Sets the area as the boss room where no other monsters roam."""
         self.boss = True
     
     def set_neighbours(self,left,right,top,bottom):
+        """Sets the areas connected to the area"""
         self.left = left
         self.right = right
         self.top = top
         self.bottom = bottom
     
-    def activate(self,party :list, monsters: list, boss):  
+    def activate(self,party :list, monsters: list, boss):
+        """Lets the player move around in the area and activates battles if the player collides with a monster."""
         area_monsters = []
         if not self.start and not self.boss: 
-            for i in range(self.monsters):
-                area_monsters.append(monsters[i])
-                monsters[i].x = randint(wall, screen_width-wall-monsters[i].over_sprite.get_width())
-                monsters[i].y = randint(wall, screen_height-wall-monsters[i].over_sprite.get_height())
+            for _ in range(randint(0,6)):
+                while True:
+                    monster = monsters[randint(0,len(monsters)-1)]
+                    if monster not in area_monsters:
+                        area_monsters.append(monster)
+                        break
+                monster.x = randint(wall, screen_width-wall-monster.over_sprite.get_width())
+                monster.y = randint(wall, screen_height-wall-monster.over_sprite.get_height())
         countdown = 0
         while True:
-            window.fill((0,0,0))
-            window.blit(self.background,(0,0))
-            move(party[0],area_monsters)
-
+            move(party[0])
             character_width = party[0].over_sprite[party[0].direction][countdown].get_width()
             character_height = party[0].over_sprite[party[0].direction][countdown].get_height()
 
             if self.boss:
-                window.blit(boss.over_sprite, (boss.x, boss.y))
                 if collision(party[0],boss,countdown):
-                    battle(party,boss)
+                    battle(party,[boss])
                     render_game_over("victory")
                     while True:
                         choose_action("victory")
@@ -134,26 +139,22 @@ class Area():
                         monster.change_speed("y")
                     if monster.y <= wall:
                         monster.change_speed("y")  
-                    window.blit(monster.over_sprite, (monster.x, monster.y))
 
                     if collision(party[0],monster,countdown):
-                        if battle(party,monster):
+                        if battle(party,monster.monsters):
                             for character in party:
-                                character.give_exp(monster.level[0]*50)
-                        monster.reset_health()
-                        monster.alive = True
+                                character.give_exp(monster.monsters[0].level[0]*50*len(monster.monsters))
                         area_monsters.remove(monster)
                         party[0].right = False
                         party[0].left = False
                         party[0].up = False
                         party[0].down = False
-
-            window.blit(party[0].over_sprite[party[0].direction][countdown],(party[0].x,party[0].y))
-            pygame.display.flip()
+            render_area(party,area_monsters,party[0].direction,countdown,self,boss)
             clock.tick(50)
 
 
 def collision(character,monster,countdown):
+    """Checks if the main character collides with a monster."""
     character_width = character.over_sprite[character.direction][countdown].get_width()
     character_height = character.over_sprite[character.direction][countdown].get_height()
     if monster.x-character_width/2 <= character.x+character_width/2 <= monster.x+monster.over_sprite.get_width()+character_width/2 and monster.y-character_height/2 <= character.y+character_height/2 <= monster.y+monster.over_sprite.get_height()+character_height/2:

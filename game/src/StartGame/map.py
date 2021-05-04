@@ -8,11 +8,11 @@ screen_height = pygame.image.load("src/Sprites/background_full.png").get_height(
 wall = pygame.image.load("src/Sprites/wall_length.png").get_height()
 
 def generate_map(pick):
-
+    """Generates the chosen map by creating and linking all the areas in it. Returns the starting room and the boss in a list."""
     if pick == 1:
         boss = Character("Necromancer",pygame.image.load("src/Sprites/necromancer2.png"),pygame.image.load("src/Sprites/necromancer1.png"))
         boss.boss = True
-        boss.give_exp(9001)
+        boss.monster = True
         boss.x = screen_width / 2 - boss.over_sprite.get_width() / 2
         boss.y = screen_height - wall - boss.over_sprite.get_height()
         start = Area(pygame.image.load("src/Sprites/background_top.png"))

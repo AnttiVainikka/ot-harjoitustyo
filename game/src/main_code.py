@@ -7,7 +7,7 @@ pygame.display.set_caption("Dungeon Crawler")
 
 
 class StartGame():
-    """A Class for starting the game"""
+    """Lets the player choose their party and a map to play in and activates the starting area."""
     def __init__(self):
         self.party = []
         self.monsters = []

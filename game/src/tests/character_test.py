@@ -41,21 +41,21 @@ class TestCharacter(unittest.TestCase):
         self.assertEqual(self.character.hp,54)
         fireball = Skill("Fireball")
         self.character.attack(self.character,fireball)
-        self.assertEqual(self.character.hp,11)
+        self.assertEqual(self.character.hp,1)
         self.character.reset_health()
         strike = Skill("Power Strike")
         self.character.attack(self.character,strike)
-        self.assertEqual(self.character.hp,44)
+        self.assertEqual(self.character.hp,34)
         arrow = Skill("Piercing Arrow")
         self.character.attack(self.character,arrow)
-        self.assertEqual(self.character.hp,4)
+        self.assertEqual(self.character.hp,0)
         self.character.hp = 500
         edge = Skill("Double Edge")
         self.character.attack(self.character,edge)
-        self.assertEqual(self.character.hp,39)
+        self.assertEqual(self.character.hp,146)
         self.character.atk = 0
         self.character.attack(self.character,0)
-        self.assertEqual(self.character.hp,38)
+        self.assertEqual(self.character.hp,145)
 
     def test_leveling_up_works(self):
         self.character.take_dmg(40)
@@ -69,14 +69,6 @@ class TestCharacter(unittest.TestCase):
         self.character.choose_character(party)
         self.assertEqual(self.character,party[0])
         self.assertGreater(self.character.hp,1)
-
-    def test_changing_speed_works(self):
-        self.character.speed_x = 4
-        self.character.change_speed("x")
-        self.assertEqual(self.character.speed_x,-4)
-        self.character.speed_y = 4
-        self.character.change_speed("y")
-        self.assertEqual(self.character.speed_y,-4)
 
     def test_recovering_works(self):
         self.character.take_dmg(40)

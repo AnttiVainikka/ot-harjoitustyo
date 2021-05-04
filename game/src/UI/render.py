@@ -6,10 +6,21 @@ screen_width = pygame.image.load("src/Sprites/background_full.png").get_width()
 screen_height = pygame.image.load("src/Sprites/background_full.png").get_height()
 window = pygame.display.set_mode((screen_width, screen_height)) 
 font = pygame.font.SysFont("Arial", 25)
+medium_font = pygame.font.SysFont("Arial", 50)
 big_font = pygame.font.SysFont("Arial", 100)
 
+def render_area(party,monsters,direction,countdown,area,boss):
+    window.fill((0,0,0))
+    window.blit(area.background,(0,0))
+    for monster in monsters:
+        window.blit(monster.over_sprite, (monster.x, monster.y))
+    window.blit(party[0].over_sprite[party[0].direction][countdown],(party[0].x,party[0].y))
+    if area.boss:
+        window.blit(boss.over_sprite, (boss.x, boss.y))
+    pygame.display.flip()
 
 def render_character_screen(left):
+    """Renders the screen where the player chooses their characters."""
     window.fill((0, 0, 0))
     counter = 0
     for character in left:
@@ -23,20 +34,41 @@ def render_character_screen(left):
     pygame.display.flip()
 
 def render_game_over(setting):
+    """Renders the game over screen."""
     window.fill((0, 0, 0))
     if setting == "victory":
         window.blit(big_font.render("You Have Conquered", True, (200, 0, 0)), (50, 100))
         window.blit(big_font.render("       the Dungeon", True, (200, 0, 0)), (50, 200))
+        #pygame.draw.rect(window,(153,50,204),pygame.Rect(0,screen_height-125,screen_width,125))
+        window.blit(font.render("Credits:",True,(200,200,200)),(10,screen_height-120))
+        window.blit(font.render("monster design credits: Stephen 'Redshrike' Challener, hosted by OpenGameArt.org",
+        True,(200,200,200)),(10,screen_height-90))
+        window.blit(font.render("main character overhead sprite credits: ArMM1998, hosted by OpenGameArt.org",
+        True,(200,200,200)),(10,screen_height-60))
+        window.blit(font.render("character sprite credits: wulax, hosted by OpenGameArt.org",
+        True,(200,200,200)),(10,screen_height-30))
     if setting == "defeat":
-        window.blit(big_font.render("Game Over", True, (200, 0, 0)), (100, 100))
+        length = big_font.size("Game Over")[0]
+        window.blit(big_font.render("Game Over", True, (200, 0, 0)), (screen_width/2-length/2, 100))
     pygame.display.flip()
 
 
-def render_battle(party,monster,character,setting):
+def render_battle(party,monsters,character,setting):
+    """Renders the battle screen based on what the setting is. As in is the player choosing a skill or who to use a potion on."""
     window.fill((0, 0, 0))
-    window.blit(font.render(f"{monster.name}:   {monster.hp}/{monster.hp+monster.taken_dmg}", True, (200, 0, 0)), (20, 0))
     window.blit(font.render(character.name, True, (200,200,200)),(0,screen_height-125))
-    window.blit(monster.sprite,(screen_width-monster.sprite.get_width()-10,screen_height/2-monster.sprite.get_height()/2+50))
+    counter = 0
+    length = 300
+    for monster in monsters:
+        if monster.alive:
+            window.blit(font.render(f"{monster.name}:   {monster.hp}/{monster.hp+monster.taken_dmg}", True, (200, 0, 0)), (20, counter*30))
+            window.blit(monster.sprite,(screen_width-monster.sprite.get_width()-10,length))
+        if setting == "choose_target_enemy" and monster.alive:
+            window.blit(font.render(f"{counter+1}.",
+            True, (200,200,200)),(screen_width-monster.sprite.get_width()-20,length))
+            window.blit(font.render("R to return", True, (200,200,200)),(150,screen_height-125))
+        counter += 1
+        length += monster.sprite.get_height() + 30
 
     for i in range(0,4):
             window.blit(party[i].sprite,(i*10+10,300+i*100))
@@ -105,6 +137,7 @@ def render_battle(party,monster,character,setting):
 
 
 def render_info(skills):
+    """Renders the descriptions of the characters skills or the items held by the party."""
     window.fill((0, 0, 0))
     counter = 0
     for skill in skills:
@@ -121,3 +154,10 @@ def render_info(skills):
     window.blit(font.render("R to return", True, (200,200,200)),(150,screen_height-125))
 
     pygame.display.flip()
+
+def render_action(action,time):
+    length = medium_font.size(action)[0]
+    window.blit(medium_font.render(action,
+    True, (200,0,0)),(screen_width/2-length/2,100))
+    pygame.display.flip()
+    pygame.time.wait(time)

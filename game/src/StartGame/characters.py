@@ -1,8 +1,10 @@
 import pygame
 from Classes.character import Character
+from Classes.monster import Monster
 from Classes.items import Item
 from UI.action import choose_action
-from StartGame.render import render_character_screen
+from UI.render import render_character_screen
+from copy import deepcopy
 
 def choose_party(party :list):
     """Let's the player choose their party"""
@@ -63,52 +65,53 @@ def choose_party(party :list):
                 break
         left[choice-1].choose_character(party)
         left.remove(left[choice-1])
-
-    for character in party:
-        character.give_exp(9001)
+    #for character in party:
+    #    character.give_exp(9001)
 
 def generate_monsters(monsters :list):
     """Adds monsters to the monster-list"""
     sprite = pygame.image.load("src/Sprites/demon.png")
-    monster1 = Character("Demon Assassin", sprite, sprite)
-    monster1.speed_x = 4
-    monster1.speed_y = 4
+    demon = Character("Demon Assassin", sprite, sprite)
+    demon2 = Character("Demon Assassin", sprite, sprite)
 
     sprite = pygame.image.load("src/Sprites/eyeball.png")
-    monster2 = Character("Beholder", sprite, sprite)
-    monster2.speed_x = 2
-    monster2.speed_y = 2
+    beholder = Character("Beholder", sprite, sprite)
+    beholder2 = Character("Beholder", sprite, sprite)
 
     sprite = pygame.image.load("src/Sprites/goblin.png")
-    monster3 = Character("Goblin Soldier", sprite, sprite)
-    monster3.speed_x = 3
-    monster3.speed_y = 3
+    goblin = Character("Goblin Soldier", sprite, sprite)
+    goblin2 = Character("Goblin Soldier", sprite, sprite)
 
     sprite = pygame.image.load("src/Sprites/skeleton.png")
-    monster4 = Character("Skeleton Warrior", sprite, sprite)
-    monster4.speed_x = 2
-    monster4.speed_y = 2
+    skeleton = Character("Skeleton Warrior", sprite, sprite)
+    skeleton2 = Character("Skeleton Warrior", sprite, sprite)
 
     sprite = pygame.image.load("src/Sprites/warlock.png")
-    monster5 = Character("Warlock", sprite, sprite)
-    monster5.speed_x = 2
-    monster5.speed_y = 2
+    warlock = Character("Warlock", sprite, sprite)
+    warlock2 = Character("Warlock", sprite, sprite)
 
     sprite = pygame.image.load("src/Sprites/dragonling.png")
-    monster6 = Character("Dragonling", sprite, sprite)
-    monster6.speed_x = 3
-    monster6.speed_y = 3
+    dragonling = Character("Dragonling", sprite, sprite)
+    dragonling2 = Character("Dragonling", sprite, sprite)
 
-    monsters.append(monster1)
-    monsters.append(monster2)
-    monsters.append(monster3)
-    monsters.append(monster4)
-    monsters.append(monster5)
-    monsters.append(monster6)
-    for character in monsters:
-        character.give_exp(9001)
+    monsters.append(Monster([demon,beholder],4))
+    monsters.append(Monster([demon,demon2],5))
+    monsters.append(Monster([demon],6))
+    monsters.append(Monster([demon,warlock,goblin,beholder],2))
+    monsters.append(Monster([beholder,warlock,warlock2,beholder2],2))
+    monsters.append(Monster([skeleton,warlock,skeleton2],2))
+    monsters.append(Monster([dragonling],5))
+    monsters.append(Monster([dragonling,dragonling2],5))
+    monsters.append(Monster([demon,dragonling],5))
+    monsters.append(Monster([skeleton,warlock,goblin],3))
+    monsters.append(Monster([goblin,beholder,goblin2],2))
+    monsters.append(Monster([beholder,skeleton,warlock],2))
+    for group in monsters:
+        for monster in group.monsters:
+            monster.monster = True
 
 def give_items(character):
+    """Gives the main character the starting items."""
     character.items.append(Item("Potion",9))
     character.items.append(Item("High Potion",6))
     character.items.append(Item("X Potion",3))
