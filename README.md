@@ -6,7 +6,7 @@
 Choose your team and venture a deadly labyrinth filled with monsters. Find the boss and defeat it to beat the game.
 
 ### Guide
-Use the arrowkeys to move while exploring and use the numpad to give commands during battle. Currently, all characters are automatically leveled to their max level so there is no need to farm experience before challenging the boss.
+Use the arrowkeys to move while exploring and use the numpad to give commands during battle. You might want to defeat many enemies to make your characters stronger but do beware, the boss also gains strength by the minute.
 
 ## Documentation
 - [Vaatimusmäärittely](https://github.com/AnttiVainikka/ot-harjoitustyo/blob/master/game/documentation/vaatimusmaarittely.md)
