@@ -3,7 +3,7 @@ import pygame
 pygame.init()
 from random import randint
 from Classes.character import Character
-from Battle.battle import battle
+from UI.battle import battle
 from UI.move import move
 from UI.render import render_game_over
 from UI.render import render_area
@@ -81,7 +81,7 @@ class Area():
                 party[0].x += 6
                 countdown += 1
                 party[0].direction = 1
-            
+
             if party[0].right and party[0].x <= screen_width-character_width-wall and (party[0].up or party[0].down):
                 party[0].x += 4
                 countdown += 1
@@ -91,7 +91,7 @@ class Area():
                 party[0].y -= 6
                 countdown += 1
                 party[0].direction = 2
-            
+
             if party[0].up and party[0].y >= wall and (party[0].right or party[0].left):
                 party[0].y -= 4
                 countdown += 1
@@ -101,7 +101,7 @@ class Area():
                 party[0].y += 6 
                 countdown += 1
                 party[0].direction = 3
-            
+
             if party[0].down and party[0].y <= screen_height-character_height-wall and (party[0].right or party[0].left):
                 party[0].y += 4
                 countdown += 1

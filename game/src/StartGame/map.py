@@ -2,7 +2,7 @@
 import pygame
 pygame.init()
 from Classes.character import Character
-from Classes.area import Area
+from UI.area import Area
 screen_width = pygame.image.load("src/Sprites/background_full.png").get_width()
 screen_height = pygame.image.load("src/Sprites/background_full.png").get_height()
 wall = pygame.image.load("src/Sprites/wall_length.png").get_height()
