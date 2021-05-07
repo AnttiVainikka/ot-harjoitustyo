@@ -157,6 +157,16 @@ def characters():
     [4,5,6,8,10] #skill levels
     )
 
+    add_character("Red Dragon",
+    [67, 86, 112, 67, 92, 112, 147, 188, 208, 230], #atk
+    [58, 75, 98, 16, 28, 81, 151, 201, 254, 341], #def
+    [58, 75, 98, 16, 28, 81, 151, 201, 254, 341], #mdef
+    [2100, 2730, 3540, 3090, 4500, 6240, 10050, 13050, 16980, 22050], #hp
+    [24, 28, 33, 39, 46, 55, 66, 79, 94, 1120], #mp
+    ["Power Strike","Shockwave","Deadly Strike","Fire Breath"], #skills
+    [3,4,7,8] #skill levels
+    )
+
 def add_character(name :str,attack :list,defense :list,mdef :list,hp :list,mp :list,skills :list,skill_levels :list):
     db.execute("INSERT INTO Characters (name) VALUES (?)",[name])
     for i in range(10):
@@ -254,6 +264,9 @@ def skills():
 
     add_skill("Apocalypse","Destruction",
     6,"almighty",0,1,0,"attack",0,0,0,0,0)
+
+    add_skill("Fire Breath","A red dragon's fiery breath.",
+    3,"magic",0,1,0,"attack",0,0,0,0,0)
 
 def add_skill(name :str,description :str,multiplier :float,damage_type :str,cost :int, aoe :int, buff :int, stat :str, recover :int, hp :int, mp :int, resurrect :int, duration :int):
     db.execute("INSERT INTO Skills (name, desc, multiplier, type, cost, aoe, buff, stat, recover, hp, mp, resurrect, duration) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",[name,description,multiplier,damage_type,cost,aoe,buff,stat,recover,hp,mp,resurrect,duration])

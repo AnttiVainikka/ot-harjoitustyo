@@ -33,8 +33,8 @@ class Character():
         self.down = False
         self.direction = 2
         self.boss = False
-        self.x = 520
-        self.y = 600
+        self.x = pygame.image.load("src/Sprites/background_full.png").get_width() / 2
+        self.y = pygame.image.load("src/Sprites/background_full.png").get_height() / 2
         self.monster = False
 
     def move_right(self):

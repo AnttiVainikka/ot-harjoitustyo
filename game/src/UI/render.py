@@ -23,14 +23,34 @@ def render_character_screen(left):
     """Renders the screen where the player chooses their characters."""
     window.fill((0, 0, 0))
     counter = 0
+    length = medium_font.size("Choose your characters")[0]
+    window.blit(medium_font.render("Choose your characters", True, (200, 0, 0)), (screen_width/2-length/2,10))
     for character in left:
         if counter < 3:
-            window.blit(font.render(f"{counter+1}. {character.name}", True, (200, 0, 0)), (20+200*counter, 50))
-            window.blit(character.sprite,(20+200*counter,80))
+            window.blit(font.render(f"{counter+1}. {character.name}", True, (200, 0, 0)), (20+200*counter, 250))
+            window.blit(character.sprite,(20+200*counter,280))
         else:
-            window.blit(font.render(f"{counter+1}. {character.name}", True, (200, 0, 0)), (20+200*counter-600, 350))
-            window.blit(character.sprite,(20+200*counter-600,380))            
+            window.blit(font.render(f"{counter+1}. {character.name}", True, (200, 0, 0)), (20+200*counter-600, 550))
+            window.blit(character.sprite,(20+200*counter-600,580))
         counter += 1
+    pygame.display.flip()
+
+def render_start(boss):
+    window.fill((0, 0, 0))
+    length = big_font.size("Find and kill the")[0]
+    window.blit(big_font.render("Find and kill the", True, (200, 0, 0)), (screen_width/2-length/2,300))
+    length = big_font.size(boss)[0]
+    window.blit(big_font.render(boss, True, (200, 0, 0)), (screen_width/2-length/2,425))
+    pygame.display.flip()
+    pygame.time.wait(3000)
+
+def render_map_selection():
+    """Renders the screen where the player chooses the map they want to play in."""
+    window.fill((0, 0, 0))
+    length = big_font.size("Choose your map")[0]
+    window.blit(big_font.render("Choose your map", True, (200, 0, 0)), (screen_width/2-length/2,10))
+    window.blit(medium_font.render("1. Necromancer's Palace", True, (200, 0 ,0)), (50, 250))
+    window.blit(medium_font.render("2. Dragon's Lair", True, (200, 0 ,0)), (50, 350))
     pygame.display.flip()
 
 def render_game_over(setting):

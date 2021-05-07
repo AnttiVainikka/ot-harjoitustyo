@@ -13,6 +13,10 @@ class TestStartGame(unittest.TestCase):
         self.map = generate_map(1)
         self.assertEqual(self.map[0].start,True)
         self.assertEqual(self.map[1].boss,True)
+        self.map = None
+        self.map = generate_map(2)
+        self.assertEqual(self.map[0].start,True)
+        self.assertEqual(self.map[1].boss,True)
 
     def test_generate_monsters_generates_monsters(self):
         monsters = []

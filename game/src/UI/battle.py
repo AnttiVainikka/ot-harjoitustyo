@@ -108,9 +108,10 @@ def battle(party,monsters):
                     character.status[1] -= 1
                     if character.status[1] <= 0:
                         character.status = ["none",0]
+                        render_battle(party,monsters,character,"battle")
                         render_action("POISON CURED",800)
                 render_battle(party,monsters,character,"battle")
-                pygame.time.wait(100)
+                pygame.time.wait(50)
             alive_characters = 4
             alive_monsters = len(monsters)
             for character in characters:

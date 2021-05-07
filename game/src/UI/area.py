@@ -110,19 +110,19 @@ class Area():
             if countdown > 27:
                 countdown = 0
 
-            if party[0].right and party[0].x + 6 > screen_width-character_width-wall and door_tall < party[0].y < screen_height - door_tall:
+            if party[0].right and party[0].x + 6 > screen_width-character_width-wall and door_tall < party[0].y + character_height / 2 < screen_height - door_tall:
                 if self.right is not None:
                     party[0].x = wall
                     self.right.activate(party,monsters,boss)
-            if party[0].left and party[0].x - 6 < wall and door_tall < party[0].y < screen_height - door_tall:
+            if party[0].left and party[0].x - 6 < wall and door_tall < party[0].y + character_height / 2 < screen_height - door_tall:
                 if self.left is not None:
                     party[0].x = screen_width-wall-character_width
                     self.left.activate(party,monsters,boss)
-            if party[0].up and party[0].y - 6 < wall and door_wide < party[0].x < screen_width - door_wide:
+            if party[0].up and party[0].y - 6 < wall and door_wide < party[0].x + character_width / 2 < screen_width - door_wide:
                 if self.top is not None:
                     party[0].y = screen_height-wall-character_height
                     self.top.activate(party,monsters,boss)
-            if party[0].down and party[0].y + 6 > screen_height-character_height-wall and door_wide < party[0].x < screen_width - door_wide:
+            if party[0].down and party[0].y + 6 > screen_height-character_height-wall and door_wide < party[0].x + character_width / 2 < screen_width - door_wide:
                 if self.bottom is not None:
                     party[0].y = wall
                     self.bottom.activate(party,monsters,boss)
