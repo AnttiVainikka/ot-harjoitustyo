@@ -18,6 +18,7 @@ Use the arrowkeys to move while exploring and use the numpad to give commands du
 ## Releases
 - [First Release](https://github.com/AnttiVainikka/ot-harjoitustyo/releases/tag/Viikko5)
 - [Second Release](https://github.com/AnttiVainikka/ot-harjoitustyo/releases/tag/viikko6)
+- [Final Release](https://github.com/AnttiVainikka/ot-harjoitustyo/releases/tag/Loppupalautus)
 
 ## Installing
 After extracting the Source code, navigate to the game-folder and run the command "poetry install" Then you can start the game by running the command "poetry run invoke start" on the game-folder. You can also activate automatic tests with the command "poetry run invoke test" and get the test coverage report with "poetry run invoke coverage-report". With "poetry run invoke lint" you can get the code's pylint grade.
