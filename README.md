@@ -13,6 +13,7 @@ Use the arrowkeys to move while exploring and use the numpad to give commands du
 - [Työaikakirjanpito](https://github.com/AnttiVainikka/ot-harjoitustyo/blob/master/game/documentation/tuntikirjanpito.md)
 - [Arkkitehtuuri](https://github.com/AnttiVainikka/ot-harjoitustyo/blob/master/game/documentation/arkkitehtuuri.md)
 - [Käyttöohje](https://github.com/AnttiVainikka/ot-harjoitustyo/blob/master/game/documentation/kayttoohje.md)
+- [Testausdokumentti](https://github.com/AnttiVainikka/ot-harjoitustyo/blob/master/game/documentation/testaus.md)
 
 ## Releases
 - [First Release](https://github.com/AnttiVainikka/ot-harjoitustyo/releases/tag/Viikko5)
