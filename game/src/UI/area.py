@@ -1,19 +1,18 @@
 import pygame
-# pylint: disable=no-member
-pygame.init()
 from random import randint
-from Classes.character import Character
 from UI.battle import battle
 from UI.move import move
 from UI.render import render_game_over
 from UI.render import render_area
 from UI.action import choose_action
+# pylint: disable=no-member
+pygame.init()
 screen_width = pygame.image.load("src/Sprites/background_full.png").get_width()
 screen_height = pygame.image.load("src/Sprites/background_full.png").get_height()
 wall = pygame.image.load("src/Sprites/wall_length.png").get_height()
 door_wide = pygame.image.load("src/Sprites/wide_length_door.png").get_width()
 door_tall = pygame.image.load("src/Sprites/tall_length_door.png").get_height()
-window = pygame.display.set_mode((screen_width, screen_height)) 
+window = pygame.display.set_mode((screen_width, screen_height))
 clock = pygame.time.Clock()
 
 class Area():
@@ -26,26 +25,26 @@ class Area():
         self.background = background
         self.start = False
         self.boss = False
-    
+
     def set_start_location(self):
         """Sets the area as the start location where the player spawns."""
         self.start = True
-    
+
     def set_boss_room(self):
         """Sets the area as the boss room where no other monsters roam."""
         self.boss = True
-    
+
     def set_neighbours(self,left,right,top,bottom):
         """Sets the areas connected to the area"""
         self.left = left
         self.right = right
         self.top = top
         self.bottom = bottom
-    
+
     def activate(self,party :list, monsters: list, boss):
-        """Lets the player move around in the area and activates battles if the player collides with a monster."""
+        """Lets the player move around in the area and activates battles."""
         area_monsters = []
-        if not self.start and not self.boss: 
+        if not self.start and not self.boss:
             for _ in range(randint(0,6)):
                 while True:
                     monster = monsters[randint(0,len(monsters)-1)]
@@ -98,7 +97,7 @@ class Area():
                 party[0].direction = 2
 
             if party[0].down and party[0].y <= screen_height-character_height-wall and party[0].right is False and party[0].left is False:
-                party[0].y += 6 
+                party[0].y += 6
                 countdown += 1
                 party[0].direction = 3
 
@@ -138,7 +137,7 @@ class Area():
                     if monster.y >= screen_height-monster.over_sprite.get_height()-wall:
                         monster.change_speed("y")
                     if monster.y <= wall:
-                        monster.change_speed("y")  
+                        monster.change_speed("y")
 
                     if collision(party[0],monster,countdown):
                         if battle(party,monster.monsters):

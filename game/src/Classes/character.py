@@ -154,11 +154,3 @@ class Character():
         """Adds the character to the party and sets them at level 1"""
         party.append(self)
         self.level_up(1)
-
-
-
-
-
-
-
-

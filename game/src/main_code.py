@@ -17,7 +17,7 @@ class StartGame():
         render_map_selection()
         while True:
             pick = choose_action("Pick map")
-            if pick == 1 or pick == 2:
+            if pick in (1,2):
                 break
         self.map = generate_map(pick)
         self.start = self.map[0]

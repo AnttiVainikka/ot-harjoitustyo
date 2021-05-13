@@ -8,12 +8,18 @@ class Item():
     """The class for items. Searches its info from a database based on its name."""
     def __init__(self,name,amount):
         self.name = name
-        self.desc = db.execute("SELECT desc FROM Items WHERE name = ?",[name]).fetchone()[0]
-        self.multiplier = db.execute("SELECT multiplier FROM Items WHERE name = ?",[name]).fetchone()[0]
-        self.aoe = db.execute("SELECT aoe FROM Items WHERE name = ?",[name]).fetchone()[0]
-        self.hp = db.execute("SELECT hp FROM Items WHERE name = ?",[name]).fetchone()[0]
-        self.mp = db.execute("SELECT mp FROM Items WHERE name = ?",[name]).fetchone()[0]
-        self.resurrect = db.execute("SELECT resurrect FROM Items WHERE name = ?",[name]).fetchone()[0]
+        self.desc = db.execute("SELECT desc FROM Items WHERE name = ?",
+        [name]).fetchone()[0]
+        self.multiplier = db.execute("SELECT multiplier FROM Items WHERE name = ?",
+        [name]).fetchone()[0]
+        self.aoe = db.execute("SELECT aoe FROM Items WHERE name = ?",
+        [name]).fetchone()[0]
+        self.hp = db.execute("SELECT hp FROM Items WHERE name = ?",
+        [name]).fetchone()[0]
+        self.mp = db.execute("SELECT mp FROM Items WHERE name = ?",
+        [name]).fetchone()[0]
+        self.resurrect = db.execute("SELECT resurrect FROM Items WHERE name = ?",
+        [name]).fetchone()[0]
         self.amount = amount
 
     def use(self,target):

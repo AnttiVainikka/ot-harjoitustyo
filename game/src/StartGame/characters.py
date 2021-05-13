@@ -4,7 +4,6 @@ from Classes.monster import Monster
 from Classes.items import Item
 from UI.action import choose_action
 from UI.render import render_character_screen
-from copy import deepcopy
 
 def choose_party(party :list):
     """Let's the player choose their party"""

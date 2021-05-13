@@ -1,5 +1,4 @@
 from random import randint
-from Classes.character import Character
 from UI.action import choose_action
 from UI.render import render_battle
 from UI.render import render_game_over
@@ -178,9 +177,8 @@ def use_skill(party,monsters,character,active_skills):
                     if party[target-1].alive is True:
                         skill.activate(character,party[target-1])
                         break
-                    else:
-                        render_action("Target must be alive",500)
-                        render_battle(party,monsters,character,"choose_target_ally")
+                    render_action("Target must be alive",500)
+                    render_battle(party,monsters,character,"choose_target_ally")
 
         elif skill.resurrect == 1:
             render_battle(party,monsters,character,"choose_target_ally")
@@ -192,9 +190,8 @@ def use_skill(party,monsters,character,active_skills):
                     if party[target-1].alive is False:
                         skill.activate(character,party[target-1])
                         break
-                    else:
-                        render_action("Target must be dead",500)
-                        render_battle(party,monsters,character,"choose_target_ally")
+                    render_action("Target must be dead",500)
+                    render_battle(party,monsters,character,"choose_target_ally")
         else:
             if skill in active_skills:
                 skill.deactivate(party,monsters)

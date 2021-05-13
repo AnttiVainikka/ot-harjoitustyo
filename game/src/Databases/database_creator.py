@@ -170,10 +170,12 @@ def characters():
 def add_character(name :str,attack :list,defense :list,mdef :list,hp :list,mp :list,skills :list,skill_levels :list):
     db.execute("INSERT INTO Characters (name) VALUES (?)",[name])
     for i in range(10):
-        db.execute("INSERT INTO StatValues (level, character, attack, defense,mdef,hp, mp) VALUES (?, ?, ?, ?, ?, ?,?)",[i+1,name,attack[i],defense[i],mdef[i],hp[i],mp[i]])
+        db.execute("INSERT INTO StatValues (level, character, attack, defense,mdef,hp, mp) VALUES (?, ?, ?, ?, ?, ?,?)",
+        [i+1,name,attack[i],defense[i],mdef[i],hp[i],mp[i]])
     counter = 0
     for skill in skills:
-        db.execute("INSERT INTO LearnSets (character, level, skill) VALUES (?, ?, ?)",[name,skill_levels[counter],skill])
+        db.execute("INSERT INTO LearnSets (character, level, skill) VALUES (?, ?, ?)",
+        [name,skill_levels[counter],skill])
         counter += 1
 
 def skills():
@@ -187,7 +189,8 @@ def skills():
     add_skill("Shockwave","Launch a shockwave dealing physical damage to all enemies",
     1.25,"physical",9,1,0,"attack",0,0,0,0,0)
 
-    add_skill("Ray of Judgement","Call forth a ray of destruction from the sky dealing almighty damage to all enemies",
+    add_skill("Ray of Judgement",
+    "Call forth a ray of destruction from the sky dealing almighty damage to all enemies",
     1.5,"almighty",24,1,0,"attack",0,0,0,0,0)
 
     add_skill("Deadly Strike","Deal massive physical damage to an enemy",

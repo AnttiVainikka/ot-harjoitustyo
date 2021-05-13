@@ -65,38 +65,38 @@ class TestSkill(unittest.TestCase):
         self.atk.activate(self.archer,self.archer)
         #original attack at level 1 is 21
         self.assertEqual(self.archer.atk,82)
-        self.atk.deactivate([self.archer],"monster")
+        self.atk.deactivate([self.archer])
         self.assertEqual(self.archer.atk,40)
 
         self.df.activate(self.archer,self.archer)
         #original defense at level 1 is 6
         self.assertEqual(self.archer.df,42)
-        self.df.deactivate([self.archer],"monster")
+        self.df.deactivate([self.archer])
         self.assertEqual(self.archer.df,30)
 
         self.mdef.activate(self.archer,self.archer)
         #original mdef at level 1 is 7
         self.assertEqual(self.archer.mdef,44)
-        self.mdef.deactivate([self.archer],"monster")
+        self.mdef.deactivate([self.archer])
         self.assertEqual(self.archer.mdef,30)
 
     def test_deactivating_single_target_skills_work(self):
         self.atk.aoe = 0
         self.atk.user = "Archer"
         self.atk.activate(self.archer,self.archer)
-        self.atk.deactivate([self.archer],"monster")
+        self.atk.deactivate([self.archer])
         self.assertEqual(self.archer.atk,40)
 
         self.df.aoe = 0
         self.df.user = "Archer"
         self.df.activate(self.archer,self.archer)
-        self.df.deactivate([self.archer],"monster")
+        self.df.deactivate([self.archer])
         self.assertEqual(self.archer.df,30)
 
         self.mdef.aoe = 0
         self.mdef.user = "Archer"
         self.mdef.activate(self.archer,self.archer)
-        self.mdef.deactivate([self.archer],"monster")
+        self.mdef.deactivate([self.archer])
         self.assertEqual(self.archer.mdef,30)
 
     def test_poisoning_works(self):

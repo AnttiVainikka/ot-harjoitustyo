@@ -1,10 +1,8 @@
 # pylint: disable=no-member
 import pygame
-pygame.init()
 from Classes.character import Character
 from UI.area import Area
-from UI.render import render_map_selection
-from UI.action import choose_action
+pygame.init()
 screen_width = pygame.image.load("src/Sprites/background_full.png").get_width()
 screen_height = pygame.image.load("src/Sprites/background_full.png").get_height()
 wall = pygame.image.load("src/Sprites/wall_length.png").get_height()
