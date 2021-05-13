@@ -34,7 +34,7 @@ def battle(party,monsters):
         for skill in active_skills:
             skill.duration -= 1
             if skill.duration == 0:
-                skill.deactivate(party,monsters)
+                skill.deactivate(party)
                 active_skills.remove(skill)
         for character in characters:
             if character.alive:
@@ -126,7 +126,7 @@ def battle(party,monsters):
 
             if alive_monsters == 0:
                 for skill in active_skills:
-                    skill.deactivate(party,monsters)
+                    skill.deactivate(party)
                 render_action("VICTORY",1000)
                 return True
 
@@ -194,7 +194,7 @@ def use_skill(party,monsters,character,active_skills):
                     render_battle(party,monsters,character,"choose_target_ally")
         else:
             if skill in active_skills:
-                skill.deactivate(party,monsters)
+                skill.deactivate(party)
                 active_skills.remove(skill)
             skill.activate(character,character)
             skill.user = character.name
@@ -209,7 +209,7 @@ def use_skill(party,monsters,character,active_skills):
                 skill.activate(character,party_member)
         else:
             if skill in active_skills:
-                skill.deactivate(party,monsters)
+                skill.deactivate(party)
                 active_skills.remove(skill)
             for party_member in party:
                 skill.activate(character,party_member)
