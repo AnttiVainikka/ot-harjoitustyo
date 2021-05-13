@@ -4,7 +4,7 @@
 
 Tarkoitus on tarjota pelaajille hauskanpitoa.
 
-## Käyttöliittymäluonnos
+## Käyttöliittymä
 
 Pelillä on graafinen käyttöliittymä, jota voidaan ohjata pääasiallisesti nuolinäppäimillä ja numeroilla. Aluksi on näkymät, joissa voi valita kartan ja sivuhahmot, jonka jälkeen näkymä vaihtuu kartan ensimmäiseen alueeseen, jossa pelaajan hahmoa voidaan liikuttaa. Näkymä vaihtuu taistelu-näkymään, kun kartalla törmätään viholliseen.
 
