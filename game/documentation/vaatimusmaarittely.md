@@ -2,33 +2,28 @@
 
 ## Sovelluksen tarkoitus
 
-Tarkoitus on luoda peli, josta pelaajat voivat saada hauskanpitoa.
+Tarkoitus on tarjota pelaajille hauskanpitoa.
 
 ## Käyttöliittymäluonnos
 
-Pelillä tulee olemaan graafinen käyttöliittymä, jota voidaan ohjata ainakin näppäimistöllä ja mahdollisesti myös hiirellä. Aluksi on näkymä, jossa voi aloittaa pelin ja valita hahmot, jonka jälkeen näkymä vaihtuu kenttiin, joissa pelaajan hahmoa voidaan liikuttaa.
+Pelillä on graafinen käyttöliittymä, jota voidaan ohjata pääasiallisesti nuolinäppäimillä ja numeroilla. Aluksi on näkymät, joissa voi valita kartan ja sivuhahmot, jonka jälkeen näkymä vaihtuu kartan ensimmäiseen alueeseen, jossa pelaajan hahmoa voidaan liikuttaa. Näkymä vaihtuu taistelu-näkymään, kun kartalla törmätään viholliseen.
 
 ## Perusversion tarjoama toiminnallisuus
 
-Kartta, jossa pelaaja voi liikuttaa hahmoaan eri kenttien välillä, joissa liikkuu vihollisia, joihin törmääminen aloittaa vuoropohjaisen taistelun vihollisen ja pelaajan valitseman joukkueen kanssa.
+Pelaaja voi valita kartan ja hahmonsa ja liikkua kartan sisällä taistellen vihollisia. Taistelut toimivat vuoropohjaisesti ja pelaaja voi hyökkäämisen lisäksi käyttää erinäisiä taikoja ja itemejä tai yrittää karata taistelusta. Jokaisessa kartassa on yksi boss-vihollinen, jonka löytäminen ja päihittäminen johtaa pelin voittamiseen.
 
 ## Jatkokehitysideoita
 
 -  Useampi päähenkilö, joista valita
--  Paljon eri sivuhenkilöitä, joita valita päähenkilön joukkueeseen
--  Enemmän monipuolisuutta vihollisiin. (tehty)
--  Uusien spritejen luominen, entisten parantelu
--  Useampien karttojen luominen uudelleenpelattavuuden parantamiseksi.
--  Boss-vihollisten luominen, joiden päihittäminen johtaa pelin voittamiseen
--  Mahdollisuus tallentaa peli, jolloin tiedot tallentuvat tiedostoon.
--  Musiikin käyttöönotto peliin.
--  Erinäisten taitojen/taikojen käyttöönotto sekä pelattaville hahmoille että vihollisille. (tehty)
--  Useampien vihollisten taistelemisen kerralla mahdollistaminen (tehty)
--  Erinäisten itemien käyttöönotto, joita voi käyttää parantamaan hahmoja.
--  Karkaamisen taisteluista mahdollistaminen.
+-  Enemmän sivuhenkilöitä, joita valita päähenkilön joukkueeseen
+-  Enemmän vihollisia ja viholliskombinaatioita
+-  Enemmän karttoja
+-  Parempien spritejen käyttöönotto
+-  Mahdollisuus tallentaa peli
+-  Musiikin käyttöönotto peliin
 -  Animaatioiden luominen taisteluja varten.
--  Taisteluiden vaikeuden ja syvyyden parantaminen (tehty)
--  Eri hahmojen voimatasojen tasapainottaminen (tehty)
+-  Taisteluiden vaikeuden ja syvyyden parantaminen
+-  Hahmojen, taitojen ja vihollisten voimatasojen tasapainottaminen
 -  Grafiikoiden parantaminen
--  Pelin tekeminen selvemmäksi käyttäjälle. (tehty)
--  Tarinan luominen pelille sekä kaikille hahmoille.
+-  Pelaajan ohjeistuksen lisääminen
+-  Tarinan luominen pelille sekä hahmoille
