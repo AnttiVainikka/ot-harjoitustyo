@@ -23,4 +23,4 @@ Use the arrowkeys to move while exploring and use the numpad to give commands du
 After extracting the Source code, navigate to the game-folder and run the command "poetry install" Then you can start the game by running the command "poetry run invoke start" on the game-folder. You can also activate automatic tests with the command "poetry run invoke test" and get the test coverage report with "poetry run invoke coverage-report". With "poetry run invoke lint" you can get the code's pylint grade.
 
 ## Pylint
-In some files I have used "pylint: disable=no-member". This is to prevent lines such as pygame.init() and pygame.KEYDOWN from registering as problems.
+In some files I have used "pylint: disable=no-member". This is to prevent lines such as pygame.init() and pygame.KEYDOWN from registering as problems. I have also excluded tests, user interface and database creation from pylint.
