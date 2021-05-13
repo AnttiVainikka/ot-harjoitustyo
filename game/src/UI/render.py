@@ -68,7 +68,6 @@ def render_game_over(setting):
         True, (200, 0, 0)), (50, 100))
         window.blit(big_font.render("       the Dungeon",
         True, (200, 0, 0)), (50, 200))
-        #pygame.draw.rect(window,(153,50,204),pygame.Rect(0,screen_height-125,screen_width,125))
         window.blit(font.render("Credits:",
         True,(200,200,200)),(10,screen_height-120))
         window.blit(font.render("monster design credits: Stephen 'Redshrike' Challener, hosted by OpenGameArt.org",
@@ -124,12 +123,6 @@ def render_battle(party,monsters,character,setting):
 
             window.blit(font.render(f"LVL  {party[i].level[0]}/10",
             True, (0,200,0)),(900,screen_height-100+i*25))
-
-            #window.blit(font.render(f"ATK  {party[i].atk}",
-            #True, (0,200,0)),(900,screen_height-100+i*25))
-
-            #window.blit(font.render(f"DEF  {party[i].mdef}",
-            #True, (0,200,0)),(900,screen_height-400+i*25))
 
     if setting == "choose_skill":
         counter = 0
