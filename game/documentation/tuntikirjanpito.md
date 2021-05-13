@@ -15,4 +15,5 @@ Päivämäärä  |  Aika  |  Mitä tehty
 27.4  |  8h  |   itemeiden luominen ja käyttöönotto, karkaamisen mahdollistaminen, battle-koodin parantelu
 4.5   | 12h  |   useamman monsterin taistelussa mahdollistaminen, monsterit pystyvät nyt käyttämään taitoja, testien lisäys
 7.5   |  5h  |   uuden kartan tekeminen ja ohjeistuksen lisääminen
-summa | 74h  |
+14.5  |  6h  |   koodin ja dokumentoinnin saattaminen lopputyön vaatimusten tasolle
+summa | 80h  |
