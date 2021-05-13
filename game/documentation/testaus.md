@@ -7,6 +7,8 @@ Luokat "Character" ja "Skill" ovat perusteellisesti testattu. Tämä suurilta os
 Funktiot "generate_map", "generate_monsters" ja "give_items" ovat testattu, että ne varmasti palauttavat oikeat asiat ja peli voi alkaa ja toimia oikein.
 
 ## Testauskattavuus
+![Kattavuus](coverage.png)
+
 Kattavuus on 79%, kun testejä, käyttöliittymää ja tietokannan luomista ei oteta huomioon. Tietokannan luomista ei ole tarvetta ottaa huomioon, koska ohjelma itse
 ei sitä suorita, vaan sitä käytetään vain, kun pelaaja haluaa helposti muokkailla tai luoda uusia henkilöitä, taitoja tai itemejä. Itse tietokanta on jo valmiiksi
 olemassa. Testauksesta puuttuu "Item" ja "Monster" luokkien testaus, mutta nämä luokat ovat pieniä ja yksinkertaisia eikä niitten toiminnassa pitäisi tulla ongelmia.
